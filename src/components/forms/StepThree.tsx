@@ -1,7 +1,7 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { useResumeForm } from "@/context/ResumeFormContext";
 import { ExperienceItem } from "@/types/resume";
 
@@ -11,43 +11,91 @@ type Props = {
 
 export default function StepThree({ prev }: Props) {
   const { data, updateData, clearData } = useResumeForm();
-  const [company, setCompany] = useState("");
-  const [role, setRole] = useState("");
-  const [year, setYear] = useState("");
 
-  // ✅ Pre-fill on first render
-  useEffect(() => {
-    if (data.experience.length > 0) {
-      const { company, role, year } = data.experience[0];
-      setCompany(company);
-      setRole(role);
-      setYear(year);
-    }
-  }, []);
+  const [experiences, setExperiences] = useState<ExperienceItem[]>(
+    data.experience?.length
+      ? data.experience
+      : [
+          {
+            company: "",
+            role: "",
+            year: "",
+            description: "",
+            customPrompt: "",
+          },
+        ]
+  );
 
-  // ✅ Avoid infinite update loop
+  const [isFresher, setIsFresher] = useState(data.experience.length === 0);
+
+  // Sync back to context + localStorage
   useEffect(() => {
-    const existing = data.experience[0] || {};
-    if (
-      company !== existing.company ||
-      role !== existing.role ||
-      year !== existing.year
-    ) {
-      updateData({ experience: [{ company, role, year }] });
+    updateData({ experience: isFresher ? [] : experiences });
+  }, [experiences, isFresher]);
+
+  const handleChange = (
+    index: number,
+    field: keyof ExperienceItem,
+    value: string
+  ) => {
+    const updated = [...experiences];
+    updated[index][field] = value;
+    setExperiences(updated);
+  };
+
+  const addExperience = () => {
+    setExperiences((prev) => [
+      ...prev,
+      {
+        company: "",
+        role: "",
+        year: "",
+        description: "",
+        customPrompt: "",
+      },
+    ]);
+  };
+
+  const deleteExperience = (index: number) => {
+    const updated = [...experiences];
+    updated.splice(index, 1);
+    setExperiences(updated);
+  };
+
+  const generateDescription = async (index: number) => {
+    const exp = experiences[index];
+    if (!exp.company || !exp.role || !exp.year) {
+      alert("⚠️ Fill Company, Role, and Year first.");
+      return;
     }
-  }, [company, role, year]);
+
+    try {
+      const res = await axios.post("/api/ai/generate-experience-description", {
+        company: exp.company,
+        role: exp.role,
+        year: exp.year,
+        prompt: exp.customPrompt || "",
+      });
+
+      const updated = [...experiences];
+      updated[index].description = res.data.description;
+      setExperiences(updated);
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to generate description");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const payload = {
       ...data,
-      experience: [{ company, role, year }],
+      experience: isFresher ? [] : experiences,
     };
 
     try {
       const token = localStorage.getItem("token");
-
       if (!token) {
         alert("❌ Unauthorized. Please login first.");
         return;
@@ -62,7 +110,6 @@ export default function StepThree({ prev }: Props) {
       if (res.data.success) {
         alert("🎉 Resume saved successfully!");
         clearData();
-        // router.push("/resume/preview")
       } else {
         alert("❌ Something went wrong!");
       }
@@ -73,43 +120,114 @@ export default function StepThree({ prev }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <h2 className="text-xl font-semibold text-gray-700">💼 Experience</h2>
-
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-600">Company</label>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="flex items-center gap-2">
         <input
-          name="company"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          className="border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          required
+          type="checkbox"
+          id="isFresher"
+          checked={isFresher}
+          onChange={(e) => setIsFresher(e.target.checked)}
         />
+        <label htmlFor="isFresher" className="text-sm text-gray-700">
+          I'm a Fresher (No experience)
+        </label>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-600">Role</label>
-        <input
-          name="role"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          required
-        />
-      </div>
+      {!isFresher &&
+        experiences.map((exp, index) => (
+          <div
+            key={index}
+            className="border border-gray-300 p-4 rounded-md space-y-3 relative"
+          >
+            <button
+              type="button"
+              onClick={() => deleteExperience(index)}
+              className="absolute top-2 right-2 text-red-500 hover:underline text-sm"
+            >
+              🗑 Delete
+            </button>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-600">Year</label>
-        <input
-          name="year"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-          className="border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          required
-        />
-      </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">
+                Company
+              </label>
+              <input
+                value={exp.company}
+                onChange={(e) => handleChange(index, "company", e.target.value)}
+                className="border px-4 py-2 rounded-md"
+                required
+              />
+            </div>
 
-      <div className="pt-4 flex justify-between">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">Role</label>
+              <input
+                value={exp.role}
+                onChange={(e) => handleChange(index, "role", e.target.value)}
+                className="border px-4 py-2 rounded-md"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">Year</label>
+              <input
+                value={exp.year}
+                onChange={(e) => handleChange(index, "year", e.target.value)}
+                className="border px-4 py-2 rounded-md"
+                required
+              />
+            </div>
+
+            {/* Optional Prompt */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">
+                Optional Prompt (to guide AI)
+              </label>
+              <input
+                value={exp.customPrompt || ""}
+                onChange={(e) =>
+                  handleChange(index, "customPrompt", e.target.value)
+                }
+                className="border px-4 py-2 rounded-md"
+                placeholder="e.g., highlight team leadership"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">
+                Description / Bullet Points
+              </label>
+              <textarea
+                value={exp.description}
+                onChange={(e) =>
+                  handleChange(index, "description", e.target.value)
+                }
+                className="border px-4 py-2 rounded-md"
+                rows={3}
+              />
+              <button
+                type="button"
+                onClick={() => generateDescription(index)}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                ✨ Generate Description with AI
+              </button>
+            </div>
+          </div>
+        ))}
+
+      {!isFresher && (
+        <button
+          type="button"
+          onClick={addExperience}
+          className="text-sm text-green-600 hover:underline"
+        >
+          ➕ Add Another Experience
+        </button>
+      )}
+
+      <div className="pt-6 flex justify-between">
         <button
           type="button"
           onClick={prev}

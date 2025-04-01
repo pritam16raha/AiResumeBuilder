@@ -14,4 +14,8 @@ export const resumes = pgTable("resumes", {
   education: jsonb("education"),
   experience: jsonb("experience"),
   createdAt: timestamp("created_at").defaultNow(),
+  projects: jsonb("projects").default([]).notNull(),
+  role: text("role"),
+  stack: text("stack"),
+  experienceSummary: text("experience_summary"),
 });

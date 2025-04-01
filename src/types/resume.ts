@@ -8,6 +8,19 @@ export type ExperienceItem = {
   company: string;
   role: string;
   year: string;
+  description: string;
+  customPrompt?: string;
+};
+
+
+export type ProjectItem = {
+  title: string;
+  techStack: string[];
+  description: string;
+  liveLink?: string;
+  frontendRepo?: string;
+  backendRepo?: string;
+  customPrompt?: string;
 };
 
 export type ResumeFormData = {
@@ -23,6 +36,9 @@ export type ResumeFormData = {
   stack?: string;
   experienceSummary?: string;
   prompt?: string;
+  projects?: ProjectItem[];
 };
+
+
 
 
