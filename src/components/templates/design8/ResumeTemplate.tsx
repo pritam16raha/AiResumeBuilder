@@ -1,0 +1,129 @@
+"use client";
+
+import React from "react";
+import type { Resume } from "@/types/resume";
+
+export default function TemplateFour({ resume }: { resume: Resume }) {
+  return (
+    <div className="max-w-3xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg border border-gray-200">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">{resume.fullName}</h1>
+        <p className="text-sm text-gray-600">
+          {resume.email} | {resume.phone}
+        </p>
+      </div>
+
+      {/* Summary */}
+      {resume.summary && (
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold text-blue-600 mb-1">Summary</h2>
+          <p className="text-gray-700">{resume.summary}</p>
+        </section>
+      )}
+
+      {/* Skills */}
+      {resume.skills && resume.skills.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold text-blue-600 mb-1">Skills</h2>
+          <ul className="flex flex-wrap gap-2">
+            {resume.skills.map((skill, index) => (
+              <li
+                key={index}
+                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+              >
+                {skill}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Education */}
+      {resume.education && resume.education.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold text-blue-600 mb-1">
+            Education
+          </h2>
+          {resume.education.map((edu, index) => (
+            <div key={index} className="text-sm text-gray-700 mb-2">
+              <p className="font-medium">{edu.degree}</p>
+              <p>
+                {edu.institution} — {edu.year}
+              </p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {/* Experience */}
+      {resume.experiences && resume.experiences.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold text-blue-600 mb-1">
+            Experience
+          </h2>
+          {resume.experiences.map((exp, index) => (
+            <div key={index} className="mb-3">
+              <p className="text-sm font-medium text-gray-800">
+                {exp.role} @ {exp.company} ({exp.year})
+              </p>
+              <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
+                {exp.descriptions.map((desc) => (
+                  <li key={desc.id}>{desc.description}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {/* Projects */}
+      {resume.projects && resume.projects.length > 0 && (
+        <section>
+          <h2 className="text-lg font-semibold text-blue-600 mb-1">Projects</h2>
+          {resume.projects.map((proj, index) => (
+            <div key={index} className="mb-4">
+              <p className="text-sm font-medium text-gray-800">
+                {proj.title} — {proj.techStack.join(", ")}
+              </p>
+              <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
+                {proj.descriptions.map((desc) => (
+                  <li key={desc.id}>{desc.description}</li>
+                ))}
+              </ul>
+              <div className="text-sm text-blue-600 mt-1 space-x-2">
+                {proj.liveLink && (
+                  <a
+                    href={proj.liveLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    🌐 Live
+                  </a>
+                )}
+                {proj.frontendRepo && (
+                  <a
+                    href={proj.frontendRepo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    💻 Frontend
+                  </a>
+                )}
+                {proj.backendRepo && (
+                  <a
+                    href={proj.backendRepo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    🔧 Backend
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </section>
+      )}
+    </div>
+  );
+}

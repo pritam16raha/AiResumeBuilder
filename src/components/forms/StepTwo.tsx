@@ -12,12 +12,13 @@ type Props = {
 
 export default function StepTwo({ next, prev }: Props) {
   const { data, updateData } = useResumeForm();
+  const [skills, setSkills] = useState<string[]>(data.skills || []);
 
-  const education = data.education?.[0] || {
-    degree: "",
-    institution: "",
-    year: "",
-  };
+  // const education = data.education?.[0] || {
+  //   degree: "",
+  //   institution: "",
+  //   year: "",
+  // };
 
   const projects = data.projects?.length
     ? data.projects
@@ -32,14 +33,64 @@ export default function StepTwo({ next, prev }: Props) {
         },
       ];
 
+  const educationList = data.education?.length
+    ? data.education
+    : [{ degree: "", institution: "", year: "" }];
+
+  const handleEduChange = (
+    index: number,
+    field: keyof EducationItem,
+    value: string
+  ) => {
+    const updated = [...educationList];
+    updated[index][field] = value;
+    updateData({ education: updated });
+  };
+
+  const addEducation = () => {
+    updateData({
+      education: [...educationList, { degree: "", institution: "", year: "" }],
+    });
+  };
+
+  const deleteEducation = (index: number) => {
+    const updated = [...educationList];
+    updated.splice(index, 1);
+    updateData({ education: updated });
+  };
+
   useEffect(() => {
-    updateData({ education: [education], projects });
+    updateData({ education: educationList, projects, skills });
   }, []);
 
-  const handleEduChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const updatedEducation = { ...education, [name]: value };
-    updateData({ education: [updatedEducation] });
+  // useEffect(() => {
+  //   updateData({ education: [education], projects });
+  // }, []);
+
+  // const handleEduChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   const updatedEducation = { ...education, [name]: value };
+  //   updateData({ education: [updatedEducation] });
+  // };
+
+  const handleSkillChange = (index: number, value: string) => {
+    const updatedSkills = [...skills];
+    updatedSkills[index] = value;
+    setSkills(updatedSkills);
+    updateData({ skills: updatedSkills });
+  };
+
+  const addSkill = () => {
+    const updatedSkills = [...skills, ""];
+    setSkills(updatedSkills);
+    updateData({ skills: updatedSkills });
+  };
+
+  const removeSkill = (index: number) => {
+    const updatedSkills = [...skills];
+    updatedSkills.splice(index, 1);
+    setSkills(updatedSkills);
+    updateData({ skills: updatedSkills });
   };
 
   const handleProjectChange = (
@@ -114,10 +165,10 @@ export default function StepTwo({ next, prev }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-700">🎓 Education</h2>
+      {/* <h2 className="text-xl font-semibold text-gray-700">🎓 Education</h2> */}
 
       {/* Education Fields */}
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         <label className="text-sm font-medium text-gray-600">Degree</label>
         <input
           name="degree"
@@ -148,7 +199,104 @@ export default function StepTwo({ next, prev }: Props) {
           className="border px-4 py-2 rounded-md"
           required
         />
+      </div> */}
+
+      {/* new */}
+
+      <h2 className="text-xl font-semibold text-gray-700">🎓 Education</h2>
+      {educationList.map((edu, index) => (
+        <div
+          key={index}
+          className="border border-gray-300 p-4 rounded-md space-y-3 relative"
+        >
+          {educationList.length > 1 && (
+            <button
+              type="button"
+              onClick={() => deleteEducation(index)}
+              className="absolute top-2 right-2 text-red-500 hover:underline text-sm"
+            >
+              🗑 Delete
+            </button>
+          )}
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-600">Degree</label>
+            <input
+              value={edu.degree}
+              onChange={(e) => handleEduChange(index, "degree", e.target.value)}
+              className="border px-4 py-2 rounded-md"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-600">
+              Institution
+            </label>
+            <input
+              value={edu.institution}
+              onChange={(e) =>
+                handleEduChange(index, "institution", e.target.value)
+              }
+              className="border px-4 py-2 rounded-md"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-600">Year</label>
+            <input
+              value={edu.year}
+              onChange={(e) => handleEduChange(index, "year", e.target.value)}
+              className="border px-4 py-2 rounded-md"
+              required
+            />
+          </div>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={addEducation}
+        className="text-sm text-green-600 hover:underline"
+      >
+        ➕ Add Another Education
+      </button>
+
+      {/* new end */}
+
+      {/* skill */}
+      <div>
+        <h2 className="text-xl font-semibold text-gray-700">🛠 Skills</h2>
+        {skills.map((skill, index) => (
+          <div key={index} className="flex gap-2 items-center mb-2">
+            <input
+              value={skill}
+              onChange={(e) => handleSkillChange(index, e.target.value)}
+              className="border px-4 py-2 rounded-md flex-1"
+              placeholder={`Skill ${index + 1}`}
+            />
+            {skills.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeSkill(index)}
+                className="text-red-500 text-sm"
+              >
+                🗑
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={addSkill}
+          className="text-sm text-green-600 hover:underline mt-2"
+        >
+          ➕ Add Another Skill
+        </button>
       </div>
+
+      {/* Skill end */}
 
       {/* Project Section */}
       <hr className="my-4" />

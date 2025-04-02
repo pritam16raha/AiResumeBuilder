@@ -10,16 +10,27 @@ export type EducationItem = {
   year: string;
 };
 
-
 export type ExperienceItem = {
-  id: string;
-  resumeId: string;
-  userId: string | null;
   company: string;
   role: string;
   year: string;
-  createdAt: string;
   descriptions: ExperienceDescription[];
+  customPrompt?: string;
+};
+
+// src/types/resume.ts (or wherever you define types)
+
+export type ExperienceFormItem = {
+  id?: string;
+  createdAt?: string;
+  company: string;
+  role: string;
+  year: string;
+  customPrompt?: string;
+  descriptions: {
+    id?: string;
+    description: string;
+  }[];
 };
 
 export type ProjectItem = {
@@ -46,6 +57,12 @@ export type ResumeFormData = {
   experienceSummary?: string;
   prompt?: string;
   projects?: ProjectItem[];
+
+  certifications?: string[];
+  awards?: string[];
+  hobbies?: string[];
+  languages?: string[];
+  references?: string[];
 };
 
 export type ProjectDescription = {
@@ -87,4 +104,7 @@ export type Resume = {
 
   projects: Project[];
   experiences: ExperienceItem[];
+
+  // ✅ Add this line
+  template?: "classic" | "modern" | "minimal" | "elegant";
 };

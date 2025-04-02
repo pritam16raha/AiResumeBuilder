@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useResumeForm } from "@/context/ResumeFormContext";
-import { ExperienceItem } from "@/types/resume";
+import { ExperienceFormItem, ExperienceItem } from "@/types/resume";
+import transformToExperienceItem from "@/utils/transform";
 
 type Props = {
   prev: () => void;
@@ -12,30 +13,38 @@ type Props = {
 export default function StepThree({ prev }: Props) {
   const { data, updateData, clearData } = useResumeForm();
 
-  const [experiences, setExperiences] = useState<ExperienceItem[]>(
+  const [experiences, setExperiences] = useState<ExperienceFormItem[]>(
     data.experience?.length
-      ? data.experience
+      ? (data.experience as ExperienceFormItem[])
       : [
           {
             company: "",
             role: "",
             year: "",
-            description: "",
             customPrompt: "",
+            descriptions: [{ description: "" }],
           },
         ]
   );
 
   const [isFresher, setIsFresher] = useState(data.experience.length === 0);
 
-  // Sync back to context + localStorage
   useEffect(() => {
-    updateData({ experience: isFresher ? [] : experiences });
+    if (isFresher) {
+      updateData({ experience: [] });
+    } else {
+      const transformed: ExperienceItem[] = experiences.map(
+        transformToExperienceItem
+      );
+      updateData({ experience: transformed });
+    }
   }, [experiences, isFresher]);
+
+  type ExperienceStringField = "company" | "role" | "year" | "customPrompt";
 
   const handleChange = (
     index: number,
-    field: keyof ExperienceItem,
+    field: ExperienceStringField,
     value: string
   ) => {
     const updated = [...experiences];
@@ -50,8 +59,12 @@ export default function StepThree({ prev }: Props) {
         company: "",
         role: "",
         year: "",
-        description: "",
         customPrompt: "",
+        descriptions: [
+          {
+            description: "",
+          },
+        ],
       },
     ]);
   };
@@ -78,7 +91,11 @@ export default function StepThree({ prev }: Props) {
       });
 
       const updated = [...experiences];
-      updated[index].description = res.data.description;
+      updated[index].descriptions = [
+        {
+          description: res.data.description,
+        },
+      ];
       setExperiences(updated);
     } catch (err) {
       console.error(err);
@@ -119,6 +136,18 @@ export default function StepThree({ prev }: Props) {
     }
   };
 
+  const handleDescriptionChange = (
+    expIndex: number,
+    descIndex: number,
+    value: string
+  ) => {
+    const updated = [...experiences];
+    if (!updated[expIndex].descriptions[descIndex]) return;
+
+    updated[expIndex].descriptions[descIndex].description = value;
+    setExperiences(updated);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex items-center gap-2">
@@ -129,7 +158,7 @@ export default function StepThree({ prev }: Props) {
           onChange={(e) => setIsFresher(e.target.checked)}
         />
         <label htmlFor="isFresher" className="text-sm text-gray-700">
-          I'm a Fresher (No experience)
+          I&apos;m a Fresher (No experience)
         </label>
       </div>
 
@@ -194,26 +223,28 @@ export default function StepThree({ prev }: Props) {
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-600">
-                Description / Bullet Points
-              </label>
-              <textarea
-                value={exp.description}
-                onChange={(e) =>
-                  handleChange(index, "description", e.target.value)
-                }
-                className="border px-4 py-2 rounded-md"
-                rows={3}
-              />
-              <button
-                type="button"
-                onClick={() => generateDescription(index)}
-                className="text-sm text-blue-600 hover:underline"
-              >
-                ✨ Generate Description with AI
-              </button>
-            </div>
+            {exp.descriptions?.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-600">
+                  Description / Bullet Points
+                </label>
+                <textarea
+                  value={exp.descriptions[0].description}
+                  onChange={(e) =>
+                    handleDescriptionChange(index, 0, e.target.value)
+                  }
+                  className="border px-4 py-2 rounded-md"
+                  rows={3}
+                />
+                <button
+                  type="button"
+                  onClick={() => generateDescription(index)}
+                  className="text-sm text-blue-600 hover:underline"
+                >
+                  ✨ Generate Description with AI
+                </button>
+              </div>
+            )}
           </div>
         ))}
 
