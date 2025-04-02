@@ -29,7 +29,7 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
       )}
 
       {/* Skills */}
-      {resume.skills && resume.skills.length > 0 && (
+      {resume.skills?.length > 0 && (
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-purple-700 mb-2">
             🛠 Skills
@@ -45,7 +45,7 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
       )}
 
       {/* Education */}
-      {resume.education && resume.education.length > 0 && (
+      {resume.education?.length > 0 && (
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-purple-700 mb-2">
             🎓 Education
@@ -61,7 +61,7 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
       )}
 
       {/* Experience */}
-      {resume.experiences && resume.experiences.length > 0 && (
+      {resume.experiences?.length > 0 && (
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-purple-700 mb-2">
             💼 Experience
@@ -82,7 +82,7 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
       )}
 
       {/* Projects */}
-      {resume.projects && resume.projects.length > 0 && (
+      {resume.projects?.length > 0 && (
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-purple-700 mb-2">
             📁 Projects
@@ -100,7 +100,6 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
                   <li key={desc.id}>{desc.description}</li>
                 ))}
               </ul>
-
               <div className="text-xs mt-1 space-x-3 text-blue-600">
                 {proj.liveLink && (
                   <a
@@ -133,6 +132,31 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Dynamic Custom Fields */}
+      {(
+        [
+          { key: "certifications", label: "📜 Certifications" },
+          { key: "languages", label: "🌐 Languages" },
+          { key: "awards", label: "🏅 Awards" },
+          { key: "hobbies", label: "🎯 Hobbies" },
+          { key: "references", label: "👥 References" },
+        ] as const
+      ).map(
+        ({ key, label }) =>
+          (resume[key] as string[])?.length > 0 && (
+            <div key={key} className="mb-6">
+              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+                {label}
+              </h2>
+              <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
+                {(resume[key] as string[]).map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )
       )}
     </div>
   );

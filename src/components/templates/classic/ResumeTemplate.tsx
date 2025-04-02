@@ -37,6 +37,30 @@ export default function ClassicTemplate({ resume }: { resume: Resume }) {
         </section>
       )}
 
+      {/* Custom Sections */}
+      {[
+        { label: "Certifications", field: resume.certifications },
+        { label: "Languages", field: resume.languages },
+        { label: "Awards", field: resume.awards },
+        { label: "Hobbies", field: resume.hobbies },
+        { label: "References", field: resume.references },
+      ].map(
+        (item) =>
+          item.field &&
+          item.field.length > 0 && (
+            <section key={item.label} className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-700 border-b pb-1 mb-2">
+                {item.label}
+              </h2>
+              <ul className="list-disc list-inside text-gray-800">
+                {item.field.map((val, i) => (
+                  <li key={i}>{val}</li>
+                ))}
+              </ul>
+            </section>
+          )
+      )}
+
       {/* Education */}
       {resume.education && resume.education.length > 0 && (
         <section className="mb-6">

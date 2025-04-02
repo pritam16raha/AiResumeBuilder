@@ -124,6 +124,27 @@ export default function MinimalTemplate({ resume }: { resume: Resume }) {
           </div>
         </section>
       )}
+
+      {/* Custom Fields */}
+      {[
+        { key: "certifications", label: "Certifications" },
+        { key: "languages", label: "Languages" },
+        { key: "awards", label: "Awards" },
+        { key: "hobbies", label: "Hobbies" },
+        { key: "references", label: "References" },
+      ].map(
+        ({ key, label }) =>
+          (resume as any)[key]?.length > 0 && (
+            <section key={key}>
+              <h2 className="text-lg font-semibold mb-1">{label}</h2>
+              <ul className="list-disc list-inside text-sm ml-4">
+                {(resume as any)[key].map((item: string, idx: number) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )
+      )}
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
       )}
 
       {/* Skills */}
-      {resume.skills && resume.skills.length > 0 && (
+      {resume.skills?.length > 0 && (
         <section>
           <h2 className="text-xl font-semibold text-blue-700 mb-2">Skills</h2>
           <div className="flex flex-wrap gap-2">
@@ -40,7 +40,7 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
       )}
 
       {/* Education */}
-      {resume.education && resume.education.length > 0 && (
+      {resume.education?.length > 0 && (
         <section>
           <h2 className="text-xl font-semibold text-blue-700 mb-2">
             Education
@@ -59,7 +59,7 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
       )}
 
       {/* Experience */}
-      {resume.experiences && resume.experiences.length > 0 && (
+      {resume.experiences?.length > 0 && (
         <section>
           <h2 className="text-xl font-semibold text-blue-700 mb-2">
             Experience
@@ -82,7 +82,7 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
       )}
 
       {/* Projects */}
-      {resume.projects && resume.projects.length > 0 && (
+      {resume.projects?.length > 0 && (
         <section>
           <h2 className="text-xl font-semibold text-blue-700 mb-2">Projects</h2>
           <div className="space-y-4">
@@ -142,6 +142,29 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
             ))}
           </div>
         </section>
+      )}
+
+      {/* Custom Sections */}
+      {[
+        { title: "Certifications", data: resume.certifications },
+        { title: "Languages", data: resume.languages },
+        { title: "Awards", data: resume.awards },
+        { title: "Hobbies", data: resume.hobbies },
+        { title: "References", data: resume.references },
+      ].map(
+        ({ title, data }) =>
+          data?.length > 0 && (
+            <section key={title}>
+              <h2 className="text-xl font-semibold text-blue-700 mb-2">
+                {title}
+              </h2>
+              <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
+                {data.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )
       )}
     </div>
   );

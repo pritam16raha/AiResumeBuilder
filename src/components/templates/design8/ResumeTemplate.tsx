@@ -23,7 +23,7 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
       )}
 
       {/* Skills */}
-      {resume.skills && resume.skills.length > 0 && (
+      {resume.skills?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-lg font-semibold text-blue-600 mb-1">Skills</h2>
           <ul className="flex flex-wrap gap-2">
@@ -40,7 +40,7 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
       )}
 
       {/* Education */}
-      {resume.education && resume.education.length > 0 && (
+      {resume.education?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-lg font-semibold text-blue-600 mb-1">
             Education
@@ -57,7 +57,7 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
       )}
 
       {/* Experience */}
-      {resume.experiences && resume.experiences.length > 0 && (
+      {resume.experiences?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-lg font-semibold text-blue-600 mb-1">
             Experience
@@ -78,8 +78,8 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
       )}
 
       {/* Projects */}
-      {resume.projects && resume.projects.length > 0 && (
-        <section>
+      {resume.projects?.length > 0 && (
+        <section className="mb-6">
           <h2 className="text-lg font-semibold text-blue-600 mb-1">Projects</h2>
           {resume.projects.map((proj, index) => (
             <div key={index} className="mb-4">
@@ -123,6 +123,31 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
             </div>
           ))}
         </section>
+      )}
+
+      {/* Dynamic Custom Fields */}
+      {(
+        [
+          { key: "certifications", label: "📜 Certifications" },
+          { key: "languages", label: "🌐 Languages" },
+          { key: "awards", label: "🏅 Awards" },
+          { key: "hobbies", label: "🎯 Hobbies" },
+          { key: "references", label: "👥 References" },
+        ] as const
+      ).map(
+        ({ key, label }) =>
+          (resume[key] as string[])?.length > 0 && (
+            <section key={key} className="mb-6">
+              <h2 className="text-lg font-semibold text-blue-600 mb-1">
+                {label}
+              </h2>
+              <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
+                {(resume[key] as string[]).map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )
       )}
     </div>
   );

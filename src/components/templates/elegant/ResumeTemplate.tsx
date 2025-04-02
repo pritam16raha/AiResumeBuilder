@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Resume } from "@/types/resume";
+import type { Resume } from "@/types/resume";
 
 export default function ElegantTemplate({ resume }: { resume: Resume }) {
   return (
@@ -93,7 +93,7 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
                   <li key={desc.id}>{desc.description}</li>
                 ))}
               </ul>
-              <div className="mt-1">
+              <div className="mt-1 text-blue-600 space-y-1 text-sm">
                 {proj.liveLink && (
                   <p>
                     🔗 Live:{" "}
@@ -101,7 +101,7 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
                       href={proj.liveLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 underline"
+                      className="underline"
                     >
                       {proj.liveLink}
                     </a>
@@ -114,7 +114,7 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
                       href={proj.frontendRepo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 underline"
+                      className="underline"
                     >
                       {proj.frontendRepo}
                     </a>
@@ -127,7 +127,7 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
                       href={proj.backendRepo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 underline"
+                      className="underline"
                     >
                       {proj.backendRepo}
                     </a>
@@ -137,6 +137,31 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Custom Sections */}
+      {(
+        [
+          { key: "certifications", label: "📜 Certifications" },
+          { key: "languages", label: "🌐 Languages" },
+          { key: "awards", label: "🏅 Awards" },
+          { key: "hobbies", label: "🎯 Hobbies" },
+          { key: "references", label: "👥 References" },
+        ] as const
+      ).map(
+        ({ key, label }) =>
+          (resume[key] as string[])?.length > 0 && (
+            <div key={key}>
+              <h2 className="text-xl font-semibold border-b pb-1 mb-2">
+                {label}
+              </h2>
+              <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
+                {(resume[key] as string[]).map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )
       )}
     </div>
   );

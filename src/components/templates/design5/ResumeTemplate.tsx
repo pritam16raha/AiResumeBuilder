@@ -20,7 +20,7 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
           </p>
         </div>
 
-        {resume.skills && resume.skills.length > 0 && (
+        {resume.skills?.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               Skills
@@ -33,7 +33,7 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
           </div>
         )}
 
-        {resume.education && resume.education.length > 0 && (
+        {resume.education?.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               Education
@@ -43,6 +43,72 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
                 {edu.degree}, {edu.institution} ({edu.year})
               </p>
             ))}
+          </div>
+        )}
+
+        {/* Custom Fields */}
+        {resume.certifications?.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
+              Certifications
+            </h2>
+            <ul className="list-disc list-inside text-sm">
+              {resume.certifications.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {resume.languages?.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
+              Languages
+            </h2>
+            <ul className="list-disc list-inside text-sm">
+              {resume.languages.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {resume.awards?.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
+              Awards
+            </h2>
+            <ul className="list-disc list-inside text-sm">
+              {resume.awards.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {resume.hobbies?.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
+              Hobbies
+            </h2>
+            <ul className="list-disc list-inside text-sm">
+              {resume.hobbies.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {resume.references?.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
+              References
+            </h2>
+            <ul className="list-disc list-inside text-sm">
+              {resume.references.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
           </div>
         )}
       </aside>
@@ -64,7 +130,7 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
           </div>
         )}
 
-        {resume.experiences && resume.experiences.length > 0 && (
+        {resume.experiences?.length > 0 && (
           <div>
             <h2 className="text-xl font-semibold border-b pb-1 border-gray-400 mb-2">
               Experience
@@ -84,7 +150,7 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
           </div>
         )}
 
-        {resume.projects && resume.projects.length > 0 && (
+        {resume.projects?.length > 0 && (
           <div>
             <h2 className="text-xl font-semibold border-b pb-1 border-gray-400 mb-2">
               Projects

@@ -8,6 +8,7 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
     <div className="max-w-5xl mx-auto grid grid-cols-4 gap-6 p-8 bg-white shadow-lg border rounded-lg">
       {/* Sidebar */}
       <aside className="col-span-1 bg-slate-100 p-4 rounded-lg space-y-4">
+        {/* Contact Info */}
         <div>
           <h2 className="text-xl font-semibold text-gray-800">👤 Info</h2>
           <p className="mt-2">
@@ -17,7 +18,8 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
           <p>{resume.phone}</p>
         </div>
 
-        {resume.skills && resume.skills.length > 0 && (
+        {/* Skills */}
+        {resume.skills?.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold text-gray-800">🛠 Skills</h2>
             <ul className="list-disc list-inside text-sm mt-2">
@@ -27,10 +29,34 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
             </ul>
           </div>
         )}
+
+        {/* Dynamic Custom Fields */}
+        {(
+          [
+            { key: "certifications", label: "📜 Certifications" },
+            { key: "languages", label: "🌐 Languages" },
+            { key: "awards", label: "🏅 Awards" },
+            { key: "hobbies", label: "🎯 Hobbies" },
+            { key: "references", label: "👥 References" },
+          ] as const
+        ).map(
+          ({ key, label }) =>
+            (resume[key] as string[])?.length > 0 && (
+              <div key={key}>
+                <h2 className="text-lg font-semibold text-gray-800">{label}</h2>
+                <ul className="list-disc list-inside text-sm mt-2">
+                  {(resume[key] as string[]).map((item, idx) => (
+                    <li key={idx}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+        )}
       </aside>
 
       {/* Main Content */}
       <main className="col-span-3 space-y-6">
+        {/* Summary */}
         {resume.summary && (
           <section>
             <h2 className="text-xl font-semibold text-gray-800">📝 Summary</h2>
@@ -38,7 +64,8 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
           </section>
         )}
 
-        {resume.education && resume.education.length > 0 && (
+        {/* Education */}
+        {resume.education?.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-gray-800">
               🎓 Education
@@ -56,7 +83,8 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
           </section>
         )}
 
-        {resume.experiences && resume.experiences.length > 0 && (
+        {/* Experience */}
+        {resume.experiences?.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-gray-800">
               💼 Experience
@@ -78,7 +106,8 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
           </section>
         )}
 
-        {resume.projects && resume.projects.length > 0 && (
+        {/* Projects */}
+        {resume.projects?.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-gray-800">📁 Projects</h2>
             <div className="space-y-4 mt-2">

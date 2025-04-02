@@ -105,6 +105,12 @@ export type Resume = {
   projects: Project[];
   experiences: ExperienceItem[];
 
+  certifications?: string[];
+  languages?: string[];
+  awards?: string[];
+  hobbies?: string[];
+  references?: string[];
+
   // ✅ Add this line
   template?: "classic" | "modern" | "minimal" | "elegant";
 };

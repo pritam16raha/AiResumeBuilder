@@ -30,6 +30,12 @@ export const resumes = pgTable("resumes", {
   role: text("role"),
   stack: text("stack"),
   experienceSummary: text("experience_summary"),
+  // ✅ NEW FIELDS
+  certifications: jsonb("certifications").$type<string[]>(),
+  languages: jsonb("languages").$type<string[]>(),
+  awards: jsonb("awards").$type<string[]>(),
+  hobbies: jsonb("hobbies").$type<string[]>(),
+  references: jsonb("references").$type<string[]>(),
 });
 
 // ✅ Resume relations (no need to store project/experience IDs in resume)

@@ -76,7 +76,7 @@ export default function TemplateThree({ resume }: { resume: Resume }) {
 
       {/* Projects */}
       {resume.projects?.length > 0 && (
-        <section>
+        <section className="mb-6">
           <h2 className="text-xl font-semibold border-b mb-2">📁 Projects</h2>
           <div className="space-y-6">
             {resume.projects.map((proj, i) => (
@@ -127,6 +127,29 @@ export default function TemplateThree({ resume }: { resume: Resume }) {
             ))}
           </div>
         </section>
+      )}
+
+      {/* Dynamic Fields */}
+      {(
+        [
+          { key: "certifications", label: "📜 Certifications" },
+          { key: "languages", label: "🌐 Languages" },
+          { key: "awards", label: "🏅 Awards" },
+          { key: "hobbies", label: "🎯 Hobbies" },
+          { key: "references", label: "👥 References" },
+        ] as const
+      ).map(
+        ({ key, label }) =>
+          (resume[key] as string[])?.length > 0 && (
+            <section key={key} className="mb-6">
+              <h2 className="text-xl font-semibold border-b mb-2">{label}</h2>
+              <ul className="list-disc list-inside text-sm ml-4">
+                {(resume[key] as string[]).map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )
       )}
     </div>
   );

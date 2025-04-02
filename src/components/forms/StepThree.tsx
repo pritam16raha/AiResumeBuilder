@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useResumeForm } from "@/context/ResumeFormContext";
-import { ExperienceFormItem, ExperienceItem } from "@/types/resume";
+import {
+  ExperienceFormItem,
+  ExperienceItem,
+  ResumeFormData,
+} from "@/types/resume";
 import transformToExperienceItem from "@/utils/transform";
 
 type Props = {
@@ -39,6 +43,28 @@ export default function StepThree({ prev }: Props) {
       updateData({ experience: transformed });
     }
   }, [experiences, isFresher]);
+
+  useEffect(() => {
+    const customFields = [
+      "certifications",
+      "languages",
+      "awards",
+      "hobbies",
+      "references",
+    ] as const;
+
+    customFields.forEach((field) => {
+      const values = data[field] ?? [];
+      updateData({ [field]: values });
+    });
+  }, [
+    data.certifications,
+    data.languages,
+    data.awards,
+    data.hobbies,
+    data.references,
+  ]);
+
 
   type ExperienceStringField = "company" | "role" | "year" | "customPrompt";
 
@@ -146,6 +172,26 @@ export default function StepThree({ prev }: Props) {
 
     updated[expIndex].descriptions[descIndex].description = value;
     setExperiences(updated);
+  };
+
+  const addCustomItem = (field: keyof ResumeFormData) => {
+    updateData({ [field]: [...(data[field] || []), ""] });
+  };
+
+  const removeCustomItem = (field: keyof ResumeFormData, index: number) => {
+    const updated = [...(data[field] || [])];
+    updated.splice(index, 1);
+    updateData({ [field]: updated });
+  };
+
+  const handleCustomChange = (
+    field: keyof ResumeFormData,
+    index: number,
+    value: string
+  ) => {
+    const updated = [...(data[field] || [])];
+    updated[index] = value;
+    updateData({ [field]: updated });
   };
 
   return (
@@ -257,6 +303,53 @@ export default function StepThree({ prev }: Props) {
           ➕ Add Another Experience
         </button>
       )}
+
+      <div className="space-y-6">
+        {["certifications", "languages", "awards", "hobbies", "references"].map(
+          (field) => (
+            <div key={field}>
+              <label className="block text-sm font-semibold text-gray-700 capitalize mb-2">
+                {field}
+              </label>
+
+              {(data[field as keyof ResumeFormData] ?? []).map(
+                (item, index) => (
+                  <div key={index} className="flex gap-2 items-center mb-2">
+                    <input
+                      value={item}
+                      onChange={(e) =>
+                        handleCustomChange(
+                          field as keyof ResumeFormData,
+                          index,
+                          e.target.value
+                        )
+                      }
+                      className="border px-4 py-2 rounded-md flex-1"
+                    />
+                    <button
+                      onClick={() =>
+                        removeCustomItem(field as keyof ResumeFormData, index)
+                      }
+                      type="button"
+                      className="text-red-500"
+                    >
+                      ❌
+                    </button>
+                  </div>
+                )
+              )}
+
+              <button
+                onClick={() => addCustomItem(field as keyof ResumeFormData)}
+                type="button"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                ➕ Add {field.slice(0, 1).toUpperCase() + field.slice(1)}
+              </button>
+            </div>
+          )
+        )}
+      </div>
 
       <div className="pt-6 flex justify-between">
         <button

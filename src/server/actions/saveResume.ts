@@ -32,6 +32,13 @@ type ResumePayload = {
     backendRepo?: string;
     customPrompt?: string;
   }[];
+
+  // ✅ Add these custom fields:
+  certifications?: string[];
+  languages?: string[];
+  awards?: string[];
+  hobbies?: string[];
+  references?: string[];
 };
 
 export async function saveResume(data: ResumePayload) {
@@ -46,6 +53,11 @@ export async function saveResume(data: ResumePayload) {
       summary: data.summary || "",
       skills: data.skills || [],
       education: data.education || [],
+      certifications: data.certifications || [],
+      languages: data.languages || [],
+      awards: data.awards || [],
+      hobbies: data.hobbies || [],
+      references: data.references || [],
     })
     .returning({ id: resumes.id });
 

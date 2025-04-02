@@ -17,7 +17,7 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
           <p className="text-sm">📱 {resume.phone}</p>
         </div>
 
-        {resume.skills && resume.skills.length > 0 && (
+        {resume.skills?.length > 0 && (
           <div>
             <h2 className="font-semibold text-white border-b border-white mb-2">
               Skills
@@ -30,7 +30,7 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
           </div>
         )}
 
-        {resume.education && resume.education.length > 0 && (
+        {resume.education?.length > 0 && (
           <div>
             <h2 className="font-semibold text-white border-b border-white mb-2">
               Education
@@ -48,6 +48,30 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
             </ul>
           </div>
         )}
+
+        {(
+          [
+            { key: "certifications", label: "📜 Certifications" },
+            { key: "languages", label: "🌐 Languages" },
+            { key: "awards", label: "🏅 Awards" },
+            { key: "hobbies", label: "🎯 Hobbies" },
+            { key: "references", label: "👥 References" },
+          ] as const
+        ).map(
+          ({ key, label }) =>
+            (resume[key] as string[])?.length > 0 && (
+              <div key={key}>
+                <h2 className="font-semibold text-white border-b border-white mb-2">
+                  {label}
+                </h2>
+                <ul className="text-sm space-y-1">
+                  {(resume[key] as string[]).map((item, i) => (
+                    <li key={i}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+        )}
       </aside>
 
       {/* Main Content */}
@@ -61,7 +85,7 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
           </section>
         )}
 
-        {resume.experiences && resume.experiences.length > 0 && (
+        {resume.experiences?.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-gray-700 mb-2">
               💼 Experience
@@ -81,7 +105,7 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
           </section>
         )}
 
-        {resume.projects && resume.projects.length > 0 && (
+        {resume.projects?.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-gray-700 mb-2">
               📁 Projects
