@@ -47,20 +47,8 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
         )}
 
         {/* Custom Fields */}
-        {resume.certifications?.length > 0 && (
-          <div>
-            <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
-              Certifications
-            </h2>
-            <ul className="list-disc list-inside text-sm">
-              {resume.certifications.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        )}
 
-        {resume.languages?.length > 0 && (
+        {Array.isArray(resume.languages) && resume.languages.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               Languages
@@ -73,7 +61,23 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
           </div>
         )}
 
-        {resume.awards?.length > 0 && (
+        {/* Certifications */}
+        {Array.isArray(resume.certifications) &&
+          resume.certifications.length > 0 && (
+            <div>
+              <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
+                Certifications
+              </h2>
+              <ul className="list-disc list-inside text-sm">
+                {resume.certifications.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+        {/* Awards */}
+        {Array.isArray(resume.awards) && resume.awards.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               Awards
@@ -86,7 +90,8 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
           </div>
         )}
 
-        {resume.hobbies?.length > 0 && (
+        {/* Hobbies */}
+        {Array.isArray(resume.hobbies) && resume.hobbies.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               Hobbies
@@ -99,7 +104,8 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
           </div>
         )}
 
-        {resume.references?.length > 0 && (
+        {/* References */}
+        {Array.isArray(resume.references) && resume.references.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               References

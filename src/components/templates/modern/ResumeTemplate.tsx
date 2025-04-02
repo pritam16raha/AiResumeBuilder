@@ -151,21 +151,25 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
         { title: "Awards", data: resume.awards },
         { title: "Hobbies", data: resume.hobbies },
         { title: "References", data: resume.references },
-      ].map(
-        ({ title, data }) =>
-          data?.length > 0 && (
-            <section key={title}>
-              <h2 className="text-xl font-semibold text-blue-700 mb-2">
-                {title}
-              </h2>
-              <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                {data.map((item, idx) => (
+      ]
+        .filter(({ data }) => Array.isArray(data) && data.length > 0) // ✅ safe filter
+        .map(({ title, data }) => (
+          <section key={title}>
+            <h2 className="text-xl font-semibold text-blue-700 mb-2">
+              {title}
+            </h2>
+            <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
+              {data!.map(
+                (
+                  item,
+                  idx // ✅ we now know data is defined
+                ) => (
                   <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )
-      )}
+                )
+              )}
+            </ul>
+          </section>
+        ))}
     </div>
   );
 }
