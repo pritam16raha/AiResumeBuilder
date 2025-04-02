@@ -3,7 +3,7 @@ import { resumes } from "@/db/schema/resumes";
 import { projects } from "@/db/schema/projects";
 import { projectDescriptions } from "@/db/schema/projectDescriptions";
 import { experiences } from "@/db/schema/experiences";
-import { experienceDescriptions } from "@/db/schema/experience_descriptions";
+import { experienceDescriptions } from "@/db/schema/experienceDescriptions";
 
 type ResumePayload = {
   userId: string;

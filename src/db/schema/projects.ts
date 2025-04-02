@@ -2,6 +2,7 @@ import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { resumes } from "./resumes";
 import { relations } from "drizzle-orm";
+import { projectDescriptions } from "./projectDescriptions";
 
 export const projects = pgTable("projects", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -15,7 +16,7 @@ export const projects = pgTable("projects", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const projectRelations = relations(projects, ({ one }) => ({
+export const projectRelations = relations(projects, ({ one, many }) => ({
   user: one(users, {
     fields: [projects.userId],
     references: [users.id],
@@ -24,4 +25,6 @@ export const projectRelations = relations(projects, ({ one }) => ({
     fields: [projects.resumeId],
     references: [resumes.id],
   }),
+  descriptions: many(projectDescriptions),
 }));
+
