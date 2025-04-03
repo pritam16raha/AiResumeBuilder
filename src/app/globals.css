@@ -124,3 +124,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #printable-cover-letter,
+  #printable-cover-letter * {
+    visibility: visible;
+  }
+
+  #printable-cover-letter {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 40px;
+    background: white;
+  }
+}

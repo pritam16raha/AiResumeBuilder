@@ -62,7 +62,6 @@ export default function ResumeClientPage({ resumeId }: { resumeId: string }) {
           ✍️ Generate Cover Letter
         </button>
       </div>
-      
     </div>
   );
 }

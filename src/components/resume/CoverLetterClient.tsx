@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { handlePrint } from "@/utils/printSection";
 
 type EducationItem = {
   degree: string;
@@ -82,8 +83,6 @@ export default function CoverLetterClient({ resumeId }: { resumeId: string }) {
     fetchResumeDetails();
   }, [resumeId, router]);
 
-
-
   // useEffect(() => {
   //   const fetchResumeDetails = async () => {
   //     const token = localStorage.getItem("token");
@@ -130,7 +129,6 @@ export default function CoverLetterClient({ resumeId }: { resumeId: string }) {
   //     console.warn("No saved cover letter found, continuing...", err);
   //   }
   // };
-
 
   const handleGenerate = async () => {
     if (!resumeData) return;
@@ -213,17 +211,27 @@ export default function CoverLetterClient({ resumeId }: { resumeId: string }) {
       </button>
 
       {coverLetter && (
-        <div className="mt-6 border rounded p-4 bg-gray-50 whitespace-pre-wrap text-sm">
-          <h2 className="text-lg font-semibold mb-2">
-            Generated Cover Letter:
-          </h2>
-          <p>{coverLetter}</p>
-
+        <div>
+          <div
+            className="mt-6 border rounded p-4 bg-gray-50 whitespace-pre-wrap text-sm"
+            id="printable-cover-letter"
+          >
+            <h2 className="text-lg font-semibold mb-2">
+              Generated Cover Letter:
+            </h2>
+            <p>{coverLetter}</p>
+          </div>
           <button
             onClick={handleSave}
             className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
           >
             💾 Save Cover Letter
+          </button>
+          <button
+            onClick={handlePrint}
+            className="mt-2 ml-3 bg-gray-800 text-white px-6 py-2 rounded hover:bg-gray-900 print:hidden"
+          >
+            🖨️ Print Cover Letter
           </button>
         </div>
       )}

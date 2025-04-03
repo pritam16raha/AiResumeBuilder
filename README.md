@@ -1,37 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💼 AI Resume Builder
 
-## Getting Started
+AI-powered Resume Builder with real-time preview, multi-template support, dynamic cover letter generation, and secure authentication.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-14-blue)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🚀 Live Demo
+
+👉 [https://ai-resume-builder.vercel.app](https://ai-resume-builder.vercel.app) *(Replace with your live link)*
+
+---
+
+## ✨ Features
+
+- ✍️ Build a professional resume with multiple modern templates
+- 🤖 AI-powered summary and cover letter generation (Gemini API)
+- 🧠 Smart prompts for experience and project descriptions
+- 💾 Save resumes securely to Supabase (PostgreSQL)
+- 📄 Download resumes and cover letters as PDF
+- 🔐 Auth (JWT-based) + Email OTP Login + Role-based access
+- 🎨 Responsive design with dark mode toggle
+- 🧩 Modular folder structure for easy scalability
+
+---
+
+## 🛠 Tech Stack
+
+**Frontend:**
+- Next.js 14 (App Router, SSR)
+- TypeScript
+- Tailwind CSS + shadcn/ui
+- React Hook Form + Zod
+
+**Backend:**
+- Supabase (PostgreSQL, auth)
+- Drizzle ORM
+- Google Gemini API
+
+**Other Tools:**
+- Docker (Dev-ready setup)
+- JWT Auth
+- html2canvas + jsPDF (PDF generation)
+- ESLint + Prettier
+
+---
+
+## 📁 Folder Structure (key files)
+
+```
+/src
+├── app
+│   ├── api                  # API routes (cover letter, resume save, etc)
+│   ├── dashboard            # Resume dashboard UI
+│   └── resume               # Resume + cover letter routes
+├── components
+│   ├── resume               # Resume builder components
+│   └── templates            # All resume template UIs
+├── db                      # Drizzle schema + config
+├── lib                     # JWT utils, helpers
+├── types                   # Global TypeScript interfaces
+├── utils                   # PDF download, print, etc.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 1. Clone this repo
+$ git clone https://github.com/yourname/ai-resume-builder.git
 
-## Learn More
+# 2. Install dependencies
+$ cd ai-resume-builder && npm install
 
-To learn more about Next.js, take a look at the following resources:
+# 3. Add environment variables
+$ cp .env.example .env.local
+# Fill in Supabase keys, Gemini API key, JWT secret, etc.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 4. Run locally
+$ npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🔐 Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create a `.env.local` file with:
+```env
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+GEMINI_API_KEY=
+JWT_SECRET=
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# AiResumeBuilder
+---
+
+## 📸 Screenshots
+
+> Add screenshots of your resume templates, builder form, and cover letter generator here!
+
+---
+
+## 📌 Roadmap
+
+- [x] Resume builder with templates
+- [x] Cover letter AI generator
+- [x] PDF downloads
+- [x] Role-based login + dashboard
+- [ ] Resume sharing via public link
+- [ ] AI-powered job matcher (coming soon)
+
+---
+
+## ✍️ Author
+
+Built with ❤️ by [Your Name](https://github.com/yourgithub)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See `LICENSE` for more details.
+
+---
+
+## 💡 Feedback & Contributions
+
+Pull requests and feedback are welcome! Feel free to fork and build your version.
+
+---
+
+> "Empower your career with AI. Make every word count."
+
