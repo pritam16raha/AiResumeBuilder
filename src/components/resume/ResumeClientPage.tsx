@@ -49,5 +49,20 @@ export default function ResumeClientPage({ resumeId }: { resumeId: string }) {
   if (!resume)
     return <p className="text-center text-gray-500">⏳ Loading resume...</p>;
 
-  return <ResumePreview resume={resume} />;
+  return (
+    <div>
+      <ResumePreview resume={resume} />
+      <div className="text-center mt-6">
+        <button
+          onClick={() =>
+            router.push(`/dashboard/resume/${resumeId}/cover-letter`)
+          }
+          className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition"
+        >
+          ✍️ Generate Cover Letter
+        </button>
+      </div>
+      
+    </div>
+  );
 }
