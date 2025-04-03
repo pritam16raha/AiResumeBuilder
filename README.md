@@ -119,7 +119,7 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 ## ✍️ Author
 
-Built with ❤️ by [Your Name](https://github.com/yourgithub)
+Built with ❤️ by [Pritam Raha](https://github.com/pritam16raha)
 
 ---
 
