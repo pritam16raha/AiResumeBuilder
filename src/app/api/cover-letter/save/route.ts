@@ -6,6 +6,7 @@ import { coverLetters } from "@/db/schema";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { verifyToken } from "@/lib/verifyToken";
+import { eq } from "drizzle-orm";
 
 // ✅ Request body validation schema
 const saveSchema = z.object({
@@ -23,13 +24,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = verifyToken(token); // must return { userId }
+    const user = verifyToken(token);
     const body = await req.json();
     const parsed = saveSchema.parse(body);
 
     const { resumeId, content } = parsed;
 
-    // Optional: Check if resume belongs to this user (secure approach)
+    // ✅ Check resume ownership
     const resume = await db.query.resumes.findFirst({
       where: (res, { eq }) => eq(res.id, resumeId),
     });
@@ -41,6 +42,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // ✅ Delete existing cover letter for this resumeId
+    // ✅ Delete existing cover letter for this resumeId
+    await db.delete(coverLetters).where(eq(coverLetters.resumeId, resumeId));
+
+    // ✅ Insert the new cover letter
     await db.insert(coverLetters).values({
       id: uuidv4(),
       resumeId,
@@ -58,3 +64,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

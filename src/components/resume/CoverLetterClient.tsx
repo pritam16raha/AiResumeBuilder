@@ -73,7 +73,7 @@ export default function CoverLetterClient({ resumeId }: { resumeId: string }) {
       } catch (err) {
         console.error("❌ Error fetching resume or saved cover letter", err);
         alert("Failed to load resume data.");
-        router.push("/dashboard");
+        // router.push("/dashboard");
       } finally {
         setLoading(false);
       }

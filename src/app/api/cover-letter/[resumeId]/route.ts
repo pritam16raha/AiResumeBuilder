@@ -23,6 +23,7 @@ export async function GET(
 
     const coverLetter = await db.query.coverLetters.findFirst({
       where: (cl, { eq }) => eq(cl.resumeId, resumeId),
+      orderBy: (cl, { desc }) => desc(cl.createdAt),
     });
 
     if (!coverLetter) {
