@@ -7,9 +7,11 @@ import { experiences } from "./experiences";
 
 export const experienceDescriptions = pgTable("experience_descriptions", {
   id: uuid("id").defaultRandom().primaryKey(),
-  experienceId: uuid("experience_id").references(() => experiences.id, {
-    onDelete: "cascade",
-  }),
+  experienceId: uuid("experience_id")
+    .notNull()
+    .references(() => experiences.id, {
+      onDelete: "cascade",
+    }),
   description: text("description").notNull(),
 });
 

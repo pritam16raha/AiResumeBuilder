@@ -20,6 +20,18 @@ export const experiences = pgTable("experiences", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// export const experienceRelations = relations(experiences, ({ one, many }) => ({
+//   resume: one(resumes, {
+//     fields: [experiences.resumeId],
+//     references: [resumes.id],
+//   }),
+//   user: one(users, {
+//     fields: [experiences.userId],
+//     references: [users.id],
+//   }),
+//   descriptions: many(experienceDescriptions),
+// }));
+
 export const experienceRelations = relations(experiences, ({ one, many }) => ({
   resume: one(resumes, {
     fields: [experiences.resumeId],
@@ -29,7 +41,10 @@ export const experienceRelations = relations(experiences, ({ one, many }) => ({
     fields: [experiences.userId],
     references: [users.id],
   }),
-  descriptions: many(experienceDescriptions),
+  descriptions: many(experienceDescriptions), // ✅ REQUIRED
 }));
+
+
+
 
 

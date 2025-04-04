@@ -3,30 +3,41 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useResumeForm } from "@/context/ResumeFormContext";
-import {
-  ExperienceFormItem,
-  ExperienceItem,
-  ResumeFormData,
-} from "@/types/resume";
-import transformToExperienceItem from "@/utils/transform";
+import { ResumeFormData } from "@/types/resume";
+
+const stringArrayFields: (keyof ResumeFormData)[] = [
+  "certifications",
+  "languages",
+  "awards",
+  "hobbies",
+  "references",
+];
 
 type Props = {
   prev: () => void;
 };
 
+type ExperienceItem = {
+  company: string;
+  role: string;
+  year: string;
+  customPrompt?: string;
+  description: string;
+};
+
 export default function StepThree({ prev }: Props) {
   const { data, updateData, clearData } = useResumeForm();
 
-  const [experiences, setExperiences] = useState<ExperienceFormItem[]>(
+  const [experiences, setExperiences] = useState<ExperienceItem[]>(
     data.experience?.length
-      ? (data.experience as ExperienceFormItem[])
+      ? (data.experience as ExperienceItem[])
       : [
           {
             company: "",
             role: "",
             year: "",
             customPrompt: "",
-            descriptions: [{ description: "" }],
+            description: "",
           },
         ]
   );
@@ -37,40 +48,13 @@ export default function StepThree({ prev }: Props) {
     if (isFresher) {
       updateData({ experience: [] });
     } else {
-      const transformed: ExperienceItem[] = experiences.map(
-        transformToExperienceItem
-      );
-      updateData({ experience: transformed });
+      updateData({ experience: experiences });
     }
   }, [experiences, isFresher]);
 
-  useEffect(() => {
-    const customFields = [
-      "certifications",
-      "languages",
-      "awards",
-      "hobbies",
-      "references",
-    ] as const;
-
-    customFields.forEach((field) => {
-      const values = data[field] ?? [];
-      updateData({ [field]: values });
-    });
-  }, [
-    data.certifications,
-    data.languages,
-    data.awards,
-    data.hobbies,
-    data.references,
-  ]);
-
-
-  type ExperienceStringField = "company" | "role" | "year" | "customPrompt";
-
   const handleChange = (
     index: number,
-    field: ExperienceStringField,
+    field: keyof ExperienceItem,
     value: string
   ) => {
     const updated = [...experiences];
@@ -86,11 +70,7 @@ export default function StepThree({ prev }: Props) {
         role: "",
         year: "",
         customPrompt: "",
-        descriptions: [
-          {
-            description: "",
-          },
-        ],
+        description: "",
       },
     ]);
   };
@@ -104,7 +84,7 @@ export default function StepThree({ prev }: Props) {
   const generateDescription = async (index: number) => {
     const exp = experiences[index];
     if (!exp.company || !exp.role || !exp.year) {
-      alert("⚠️ Fill Company, Role, and Year first.");
+      alert("⚠️ Please fill Company, Role, and Year.");
       return;
     }
 
@@ -117,21 +97,16 @@ export default function StepThree({ prev }: Props) {
       });
 
       const updated = [...experiences];
-      updated[index].descriptions = [
-        {
-          description: res.data.description,
-        },
-      ];
+      updated[index].description = res.data.description;
       setExperiences(updated);
     } catch (err) {
+      alert("❌ Failed to generate description.");
       console.error(err);
-      alert("❌ Failed to generate description");
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const payload = {
       ...data,
       experience: isFresher ? [] : experiences,
@@ -145,9 +120,7 @@ export default function StepThree({ prev }: Props) {
       }
 
       const res = await axios.post("/api/save-resume", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.data.success) {
@@ -160,18 +133,6 @@ export default function StepThree({ prev }: Props) {
       console.error("Resume Save Failed:", err);
       alert("❌ Failed to save resume.");
     }
-  };
-
-  const handleDescriptionChange = (
-    expIndex: number,
-    descIndex: number,
-    value: string
-  ) => {
-    const updated = [...experiences];
-    if (!updated[expIndex].descriptions[descIndex]) return;
-
-    updated[expIndex].descriptions[descIndex].description = value;
-    setExperiences(updated);
   };
 
   const addCustomItem = (field: keyof ResumeFormData) => {
@@ -254,7 +215,6 @@ export default function StepThree({ prev }: Props) {
               />
             </div>
 
-            {/* Optional Prompt */}
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-gray-600">
                 Optional Prompt (to guide AI)
@@ -269,28 +229,27 @@ export default function StepThree({ prev }: Props) {
               />
             </div>
 
-            {exp.descriptions?.length > 0 && (
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-600">
-                  Description / Bullet Points
-                </label>
-                <textarea
-                  value={exp.descriptions[0].description}
-                  onChange={(e) =>
-                    handleDescriptionChange(index, 0, e.target.value)
-                  }
-                  className="border px-4 py-2 rounded-md"
-                  rows={3}
-                />
-                <button
-                  type="button"
-                  onClick={() => generateDescription(index)}
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  ✨ Generate Description with AI
-                </button>
-              </div>
-            )}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">
+                Description / Bullet Points
+              </label>
+              <textarea
+                value={exp.description}
+                onChange={(e) =>
+                  handleChange(index, "description", e.target.value)
+                }
+                className="border px-4 py-2 rounded-md"
+                rows={3}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => generateDescription(index)}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                ✨ Generate Description with AI
+              </button>
+            </div>
           </div>
         ))}
 
@@ -305,50 +264,44 @@ export default function StepThree({ prev }: Props) {
       )}
 
       <div className="space-y-6">
-        {["certifications", "languages", "awards", "hobbies", "references"].map(
-          (field) => (
+        {stringArrayFields.map((field) => {
+          const items = (data[field] as string[]) || [];
+
+          return (
             <div key={field}>
               <label className="block text-sm font-semibold text-gray-700 capitalize mb-2">
                 {field}
               </label>
 
-              {(data[field as keyof ResumeFormData] ?? []).map(
-                (item, index) => (
-                  <div key={index} className="flex gap-2 items-center mb-2">
-                    <input
-                      value={item}
-                      onChange={(e) =>
-                        handleCustomChange(
-                          field as keyof ResumeFormData,
-                          index,
-                          e.target.value
-                        )
-                      }
-                      className="border px-4 py-2 rounded-md flex-1"
-                    />
-                    <button
-                      onClick={() =>
-                        removeCustomItem(field as keyof ResumeFormData, index)
-                      }
-                      type="button"
-                      className="text-red-500"
-                    >
-                      ❌
-                    </button>
-                  </div>
-                )
-              )}
+              {items.map((item: string, index: number) => (
+                <div key={index} className="flex gap-2 items-center mb-2">
+                  <input
+                    value={item}
+                    onChange={(e) =>
+                      handleCustomChange(field, index, e.target.value)
+                    }
+                    className="border px-4 py-2 rounded-md flex-1"
+                  />
+                  <button
+                    onClick={() => removeCustomItem(field, index)}
+                    type="button"
+                    className="text-red-500"
+                  >
+                    ❌
+                  </button>
+                </div>
+              ))}
 
               <button
-                onClick={() => addCustomItem(field as keyof ResumeFormData)}
+                onClick={() => addCustomItem(field)}
                 type="button"
                 className="text-sm text-blue-600 hover:underline"
               >
-                ➕ Add {field.slice(0, 1).toUpperCase() + field.slice(1)}
+                ➕ Add {field.charAt(0).toUpperCase() + field.slice(1)}
               </button>
             </div>
-          )
-        )}
+          );
+        })}
       </div>
 
       <div className="pt-6 flex justify-between">

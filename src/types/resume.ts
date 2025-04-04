@@ -1,6 +1,4 @@
 export type ExperienceDescription = {
-  id: string;
-  experienceId: string;
   description: string;
 };
 
@@ -14,23 +12,18 @@ export type ExperienceItem = {
   company: string;
   role: string;
   year: string;
-  descriptions: ExperienceDescription[];
+  description: string;
   customPrompt?: string;
 };
 
 // src/types/resume.ts (or wherever you define types)
 
 export type ExperienceFormItem = {
-  id?: string;
-  createdAt?: string;
   company: string;
   role: string;
   year: string;
+  description: string;
   customPrompt?: string;
-  descriptions: {
-    id?: string;
-    description: string;
-  }[];
 };
 
 export type ProjectItem = {

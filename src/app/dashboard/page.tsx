@@ -60,6 +60,14 @@ export default function DashboardPage() {
                   {resume.fullName}
                 </h2>
               </Link>
+
+              {/* ✅ Edit button */}
+              <Link
+                href={`/dashboard/resume/${resume.id}/edit`}
+                className="text-sm text-white bg-indigo-600 px-3 py-1 rounded hover:bg-indigo-700"
+              >
+                ✏️ Edit
+              </Link>
               <p className="text-sm text-gray-600">{resume.summary}</p>
               <p className="text-xs text-gray-400 mt-2">
                 Created at: {new Date(resume.createdAt).toLocaleString()}
