@@ -50,7 +50,7 @@ export default function StepThree({ prev }: Props) {
     } else {
       updateData({ experience: experiences });
     }
-  }, [experiences, isFresher]);
+  }, [experiences, isFresher, updateData]);
 
   const handleChange = (
     index: number,

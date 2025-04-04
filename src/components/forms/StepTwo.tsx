@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useResumeForm } from "@/context/ResumeFormContext";
 import { EducationItem, ProjectItem } from "@/types/resume";
 import axios from "axios";
@@ -20,7 +20,8 @@ export default function StepTwo({ next, prev }: Props) {
   //   year: "",
   // };
 
-  const projects = data.projects?.length
+const projects = useMemo(() => {
+  return data.projects?.length
     ? data.projects
     : [
         {
@@ -32,10 +33,13 @@ export default function StepTwo({ next, prev }: Props) {
           backendRepo: "",
         },
       ];
+}, [data.projects]);
 
-  const educationList = data.education?.length
+const educationList = useMemo(() => {
+  return data.education?.length
     ? data.education
     : [{ degree: "", institution: "", year: "" }];
+}, [data.education]);
 
   const handleEduChange = (
     index: number,
@@ -61,7 +65,7 @@ export default function StepTwo({ next, prev }: Props) {
 
   useEffect(() => {
     updateData({ education: educationList, projects, skills });
-  }, []);
+  }, [ educationList, projects, skills, updateData]);
 
   // useEffect(() => {
   //   updateData({ education: [education], projects });
