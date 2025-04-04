@@ -89,6 +89,25 @@ export default function EditResumePage({resumeId}: ResumeEditFormProps) {
     }
   };
 
+  function hasDescriptions(
+    exp: ExperienceItem | (ExperienceItem & { descriptions?: unknown })
+  ): exp is ExperienceItem & { descriptions: { description: string }[] } {
+    return (
+      typeof exp === "object" &&
+      exp !== null &&
+      "descriptions" in exp &&
+      Array.isArray((exp as { descriptions?: unknown }).descriptions) &&
+      (exp as { descriptions: unknown[] }).descriptions.every(
+        (d) =>
+          typeof d === "object" &&
+          d !== null &&
+          "description" in d &&
+          typeof (d as { description: unknown }).description === "string"
+      )
+    );
+  }
+
+
   if (loading || !formData) return <p>Loading...</p>;
 
   return (
@@ -206,11 +225,61 @@ export default function EditResumePage({resumeId}: ResumeEditFormProps) {
               placeholder="Year"
               className="w-full p-2 border mb-2"
             />
-            <textarea
+            {/* <textarea
               value={exp.description || ""}
               onChange={(e) =>
                 handleExperienceChange(index, "description", e.target.value)
               }
+              className="w-full p-2 border"
+              placeholder="Experience Description"
+            /> */}
+            {/* <textarea
+              value={exp.descriptions?.[0]?.description || ""}
+              onChange={(e) => {
+                const updatedExperiences = [...formData.experiences];
+                const current = updatedExperiences[index];
+
+                if (
+                  !current.descriptions ||
+                  current.descriptions.length === 0
+                ) {
+                  current.descriptions = [{ description: "" }];
+                }
+
+                current.descriptions[0].description = e.target.value;
+
+                setFormData({ ...formData, experiences: updatedExperiences });
+              }}
+              className="w-full p-2 border"
+              placeholder="Experience Description"
+            /> */}
+
+            <textarea
+              value={
+                hasDescriptions(exp)
+                  ? exp.descriptions[0]?.description || ""
+                  : exp.description || ""
+              }
+              onChange={(e) => {
+                const updatedExperiences = [...formData.experiences];
+
+                if (hasDescriptions(updatedExperiences[index])) {
+                  const current = updatedExperiences[index];
+
+                  if (
+                    !current.descriptions ||
+                    current.descriptions.length === 0
+                  ) {
+                    current.descriptions = [{ description: "" }];
+                  }
+
+                  current.descriptions[0].description = e.target.value;
+                } else {
+                  updatedExperiences[index].description = e.target.value;
+                }
+
+                setFormData({ ...formData, experiences: updatedExperiences });
+              }}
               className="w-full p-2 border"
               placeholder="Experience Description"
             />

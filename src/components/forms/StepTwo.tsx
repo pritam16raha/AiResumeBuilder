@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { useResumeForm } from "@/context/ResumeFormContext";
 import { EducationItem, ProjectItem } from "@/types/resume";
 import axios from "axios";
+import { useMemo, useState } from "react";
 
 type Props = {
   next: () => void;
@@ -63,9 +63,9 @@ const educationList = useMemo(() => {
     updateData({ education: updated });
   };
 
-  useEffect(() => {
-    updateData({ education: educationList, projects, skills });
-  }, [ educationList, projects, skills, updateData]);
+  // useEffect(() => {
+  //   updateData({ education: educationList, projects, skills });
+  // }, [ educationList, projects, skills, updateData]);
 
   // useEffect(() => {
   //   updateData({ education: [education], projects });

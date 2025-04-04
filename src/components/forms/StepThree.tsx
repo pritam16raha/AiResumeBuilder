@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { useResumeForm } from "@/context/ResumeFormContext";
 import { ResumeFormData } from "@/types/resume";
+import axios from "axios";
+import { useState } from "react";
 
 const stringArrayFields: (keyof ResumeFormData)[] = [
   "certifications",
@@ -44,13 +44,13 @@ export default function StepThree({ prev }: Props) {
 
   const [isFresher, setIsFresher] = useState(data.experience.length === 0);
 
-  useEffect(() => {
-    if (isFresher) {
-      updateData({ experience: [] });
-    } else {
-      updateData({ experience: experiences });
-    }
-  }, [experiences, isFresher, updateData]);
+  // useEffect(() => {
+  //   if (isFresher) {
+  //     updateData({ experience: [] });
+  //   } else {
+  //     updateData({ experience: experiences });
+  //   }
+  // }, [experiences, isFresher, updateData]);
 
   const handleChange = (
     index: number,
