@@ -40,6 +40,32 @@ export default function DashboardPage() {
     fetchResumes();
   }, []);
 
+  const handleDelete = async (resumeId: string) => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this resume?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.delete(`/api/resume/${resumeId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.data.success) {
+        alert("✅ Resume deleted.");
+        setResumes((prev) => prev.filter((r) => r.id !== resumeId));
+      } else {
+        alert("❌ Failed to delete resume.");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("❌ Error deleting resume.");
+    }
+  };
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">📄 My Resumes</h1>
@@ -53,25 +79,36 @@ export default function DashboardPage() {
           {resumes.map((resume) => (
             <li
               key={resume.id}
-              className="border p-4 rounded-md hover:bg-gray-50 transition"
+              className="border p-4 rounded-md hover:bg-gray-50 transition relative"
             >
-              <Link href={`/dashboard/resume/${resume.id}`}>
-                <h2 className="text-lg font-semibold text-blue-600 hover:underline">
-                  {resume.fullName}
-                </h2>
-              </Link>
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  <Link href={`/dashboard/resume/${resume.id}`}>
+                    <h2 className="text-lg font-semibold text-blue-600 hover:underline">
+                      {resume.fullName}
+                    </h2>
+                  </Link>
 
-              {/* ✅ Edit button */}
-              <Link
-                href={`/dashboard/resume/${resume.id}/edit`}
-                className="text-sm text-white bg-indigo-600 px-3 py-1 rounded hover:bg-indigo-700"
-              >
-                ✏️ Edit
-              </Link>
-              <p className="text-sm text-gray-600">{resume.summary}</p>
-              <p className="text-xs text-gray-400 mt-2">
-                Created at: {new Date(resume.createdAt).toLocaleString()}
-              </p>
+                  <p className="text-sm text-gray-600">{resume.summary}</p>
+                  <p className="text-xs text-gray-400 mt-2">
+                    Created at: {new Date(resume.createdAt).toLocaleString()}
+                  </p>
+
+                  <Link
+                    href={`/dashboard/resume/${resume.id}/edit`}
+                    className="inline-block text-sm text-white bg-indigo-600 px-3 py-1 mt-2 rounded hover:bg-indigo-700"
+                  >
+                    ✏️ Edit
+                  </Link>
+                </div>
+
+                <button
+                  onClick={() => handleDelete(resume.id)}
+                  className="text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                >
+                  🗑️ Delete
+                </button>
+              </div>
             </li>
           ))}
         </ul>

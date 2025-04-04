@@ -62,3 +62,51 @@ export async function GET(
     );
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { resumeId: string } }
+) {
+  try {
+    const authHeader = req.headers.get("Authorization");
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized - Missing token" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.split(" ")[1];
+    const user = verifyToken(token);
+
+    const resumeId = context.params.resumeId;
+
+    // ✅ Check resume ownership before deletion
+    const resume = await db.query.resumes.findFirst({
+      where: eq(resumes.id, resumeId),
+    });
+
+    if (!resume || resume.userId !== user.userId) {
+      return NextResponse.json(
+        { success: false, error: "Resume not found or unauthorized" },
+        { status: 404 }
+      );
+    }
+
+    // ✅ Delete resume (cascade deletes handle related data)
+    await db.delete(resumes).where(eq(resumes.id, resumeId));
+
+    return NextResponse.json({
+      success: true,
+      message: "Resume deleted successfully",
+    });
+  } catch (err) {
+    console.error("❌ Resume DELETE error:", err);
+    return NextResponse.json(
+      { success: false, error: "Something went wrong while deleting resume" },
+      { status: 500 }
+    );
+  }
+}
+
