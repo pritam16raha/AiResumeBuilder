@@ -1,298 +1,335 @@
-// src/app/dashboard/resume/[resumeId]/edit/page.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
+
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { ExperienceItem, Project, Resume } from "@/types/resume";
+import { useEditResumeContext } from "@/context/EditResumeContext";
+import { ResumeEditData } from "@/types/resume";
 
-type ResumeEditFormProps = {
+interface Props {
   resumeId: string;
-};
+}
 
-export default function EditResumePage({resumeId}: ResumeEditFormProps) {
-//   const { resumeId } = useParams();
+type SimpleArrayField =
+  | "certifications"
+  | "languages"
+  | "awards"
+  | "hobbies"
+  | "references";
+
+const simpleFields: SimpleArrayField[] = [
+  "certifications",
+  "languages",
+  "awards",
+  "hobbies",
+  "references",
+];
+
+export default function ResumeEditForm({ resumeId }: Props) {
   const router = useRouter();
-
-  const [formData, setFormData] = useState<Resume | null>(null);
+  const { formData, setFormData, updateField } = useEditResumeContext();
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchResume = async () => {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`/api/resume/${resumeId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setFormData(res.data.resume);
-      setLoading(false);
+      if (!token) return router.push("/login");
+
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/resume/${resumeId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (!formData) {
+          const raw = res.data.resume;
+
+          const cleaned: ResumeEditData = {
+            ...raw,
+            summary: raw.summary || "",
+            skills: raw.skills || [],
+            certifications: raw.certifications || [],
+            languages: raw.languages || [],
+            awards: raw.awards || [],
+            hobbies: raw.hobbies || [],
+            references: raw.references || [],
+            education: raw.education || [],
+            projects: raw.projects || [],
+            experiences: raw.experiences || [],
+          };
+
+          setFormData(cleaned);
+        }
+
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load resume.");
+        setLoading(false);
+        console.log(err);
+      }
     };
 
-    fetchData();
-  }, [resumeId]);
+    fetchResume();
+  }, [resumeId, router, setFormData, formData]);
 
-  const handleInputChange = <K extends keyof Resume>(
-    field: K,
-    value: Resume[K]
-  ) => {
-    setFormData((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        [field]: value,
-      };
-    });
-  };
-
-  const handleArrayChange = (field: keyof Resume, value: string) => {
-    handleInputChange(
-      field,
-      value.split(",").map((v) => v.trim())
-    );
-  };
-
-  const handleProjectChange = <K extends keyof Project>(
-    index: number,
-    key: K,
-    value: Project[K]
-  ) => {
-    if (!formData) return; // ✅ guard
-
-    const updated = [...formData.projects];
-    updated[index][key] = value;
-    setFormData({ ...formData, projects: updated });
-  };
-
-  const handleExperienceChange = <K extends keyof ExperienceItem>(
-    index: number,
-    key: K,
-    value: ExperienceItem[K]
-  ) => {
+  const handleSave = async () => {
     if (!formData) return;
-    const updated = [...formData.experiences];
-    updated[index][key] = value;
-    setFormData({ ...formData, experiences: updated });
-  };
+    const token = localStorage.getItem("token");
+    if (!token) return router.push("/login");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(`/api/resume/${resumeId}/edit`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert("✅ Resume updated successfully");
-      router.push("/dashboard");
+      setSaving(true);
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/resume/${resumeId}/edit`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setSaving(false);
+      router.push(`/dashboard/resume/${resumeId}`);
     } catch (err) {
-      console.error(err);
-      alert("❌ Failed to update resume");
+      setError("Failed to save changes.");
+      setSaving(false);
+      console.log(err);
     }
   };
 
-  function hasDescriptions(
-    exp: ExperienceItem | (ExperienceItem & { descriptions?: unknown })
-  ): exp is ExperienceItem & { descriptions: { description: string }[] } {
-    return (
-      typeof exp === "object" &&
-      exp !== null &&
-      "descriptions" in exp &&
-      Array.isArray((exp as { descriptions?: unknown }).descriptions) &&
-      (exp as { descriptions: unknown[] }).descriptions.every(
-        (d) =>
-          typeof d === "object" &&
-          d !== null &&
-          "description" in d &&
-          typeof (d as { description: unknown }).description === "string"
-      )
-    );
-  }
-
-
-  if (loading || !formData) return <p>Loading...</p>;
+  if (loading) return <p className="text-center">Loading...</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
+  if (!formData) return null;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-4xl mx-auto px-4 py-8 space-y-6"
-    >
-      <h1 className="text-2xl font-bold">📝 Edit Resume</h1>
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Edit Resume</h1>
 
-      <input
-        type="text"
-        value={formData.fullName || ""}
-        onChange={(e) => handleInputChange("fullName", e.target.value)}
-        className="w-full p-2 border"
-        placeholder="Full Name"
-      />
-      <input
-        type="email"
-        value={formData.email || ""}
-        onChange={(e) => handleInputChange("email", e.target.value)}
-        className="w-full p-2 border"
-        placeholder="Email"
-      />
-      <input
-        type="text"
-        value={formData.phone || ""}
-        onChange={(e) => handleInputChange("phone", e.target.value)}
-        className="w-full p-2 border"
-        placeholder="Phone"
-      />
-      <textarea
-        value={formData.summary || ""}
-        onChange={(e) => handleInputChange("summary", e.target.value)}
-        className="w-full p-2 border"
-        rows={4}
-        placeholder="Summary"
-      />
+      <div className="grid gap-4">
+        <input
+          type="text"
+          placeholder="Full Name"
+          value={formData.fullName || ""}
+          onChange={(e) => updateField("fullName", e.target.value)}
+          className="border p-2 rounded"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={formData.email || ""}
+          onChange={(e) => updateField("email", e.target.value)}
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Phone"
+          value={formData.phone || ""}
+          onChange={(e) => updateField("phone", e.target.value)}
+          className="border p-2 rounded"
+        />
+        <textarea
+          placeholder="Summary"
+          value={formData.summary || ""}
+          onChange={(e) => updateField("summary", e.target.value)}
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Skills (comma separated)"
+          value={
+            Array.isArray(formData.skills) ? formData.skills.join(", ") : ""
+          }
+          onChange={(e) =>
+            updateField(
+              "skills",
+              e.target.value.split(",").map((s) => s.trim())
+            )
+          }
+          className="border p-2 rounded"
+        />
 
-      <textarea
-        value={formData.skills?.join(", ") || ""}
-        onChange={(e) => handleArrayChange("skills", e.target.value)}
-        className="w-full p-2 border"
-        placeholder="Comma-separated skills"
-      />
-
-      <div>
-        <h2 className="font-semibold text-lg">📁 Projects</h2>
-        {formData.projects?.map((proj: Project, index: number) => (
-          <div key={proj.id} className="border p-4 mt-4 rounded">
+        {formData.education?.map((edu, index) => (
+          <div key={index} className="border p-2 rounded">
             <input
-              value={proj.title || ""}
-              onChange={(e) =>
-                handleProjectChange(index, "title", e.target.value)
-              }
-              placeholder="Project Title"
-              className="w-full p-2 border mb-2"
-            />
-            <input
-              value={proj.techStack?.join(", ") || ""}
-              onChange={(e) =>
-                handleProjectChange(
-                  index,
-                  "techStack",
-                  e.target.value.split(",").map((v) => v.trim())
-                )
-              }
-              placeholder="Tech Stack"
-              className="w-full p-2 border mb-2"
-            />
-            <textarea
-              value={proj.descriptions?.[0]?.description || ""}
+              type="text"
+              placeholder="Degree"
+              value={edu.degree}
               onChange={(e) => {
-                const newDescriptions = [...proj.descriptions];
-                newDescriptions[0] = {
-                  ...newDescriptions[0],
-                  description: e.target.value,
-                };
-                handleProjectChange(index, "descriptions", newDescriptions);
+                const updated = [...formData.education!];
+                updated[index].degree = e.target.value;
+                updateField("education", updated);
               }}
-              className="w-full p-2 border"
-              placeholder="Project Description"
-            />
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <h2 className="font-semibold text-lg">💼 Experiences</h2>
-        {formData.experiences?.map((exp: ExperienceItem, index: number) => (
-          <div
-            key={`${exp.company}-${index}`}
-            className="border p-4 mt-4 rounded"
-          >
-            <input
-              value={exp.company || ""}
-              onChange={(e) =>
-                handleExperienceChange(index, "company", e.target.value)
-              }
-              placeholder="Company"
-              className="w-full p-2 border mb-2"
+              className="mb-1 w-full"
             />
             <input
-              value={exp.role || ""}
-              onChange={(e) =>
-                handleExperienceChange(index, "role", e.target.value)
-              }
-              placeholder="Role"
-              className="w-full p-2 border mb-2"
+              type="text"
+              placeholder="Institution"
+              value={edu.institution}
+              onChange={(e) => {
+                const updated = [...formData.education!];
+                updated[index].institution = e.target.value;
+                updateField("education", updated);
+              }}
+              className="mb-1 w-full"
             />
             <input
-              value={exp.year || ""}
-              onChange={(e) =>
-                handleExperienceChange(index, "year", e.target.value)
-              }
+              type="text"
               placeholder="Year"
-              className="w-full p-2 border mb-2"
-            />
-            {/* <textarea
-              value={exp.description || ""}
-              onChange={(e) =>
-                handleExperienceChange(index, "description", e.target.value)
-              }
-              className="w-full p-2 border"
-              placeholder="Experience Description"
-            /> */}
-            {/* <textarea
-              value={exp.descriptions?.[0]?.description || ""}
+              value={edu.year}
               onChange={(e) => {
-                const updatedExperiences = [...formData.experiences];
-                const current = updatedExperiences[index];
-
-                if (
-                  !current.descriptions ||
-                  current.descriptions.length === 0
-                ) {
-                  current.descriptions = [{ description: "" }];
-                }
-
-                current.descriptions[0].description = e.target.value;
-
-                setFormData({ ...formData, experiences: updatedExperiences });
+                const updated = [...formData.education!];
+                updated[index].year = e.target.value;
+                updateField("education", updated);
               }}
-              className="w-full p-2 border"
-              placeholder="Experience Description"
-            /> */}
-
-            <textarea
-              value={
-                hasDescriptions(exp)
-                  ? exp.descriptions[0]?.description || ""
-                  : exp.description || ""
-              }
-              onChange={(e) => {
-                const updatedExperiences = [...formData.experiences];
-
-                if (hasDescriptions(updatedExperiences[index])) {
-                  const current = updatedExperiences[index];
-
-                  if (
-                    !current.descriptions ||
-                    current.descriptions.length === 0
-                  ) {
-                    current.descriptions = [{ description: "" }];
-                  }
-
-                  current.descriptions[0].description = e.target.value;
-                } else {
-                  updatedExperiences[index].description = e.target.value;
-                }
-
-                setFormData({ ...formData, experiences: updatedExperiences });
-              }}
-              className="w-full p-2 border"
-              placeholder="Experience Description"
+              className="w-full"
             />
+          </div>
+        ))}
+
+        {simpleFields.map((key) => (
+          <div key={key} className="border p-2 rounded">
+            <label className="block font-semibold mb-1 capitalize">{key}</label>
+            {formData[key]?.map((val: string, index: number) => (
+              <input
+                key={index}
+                type="text"
+                value={val}
+                onChange={(e) => {
+                  const updated = [...formData[key]!];
+                  updated[index] = e.target.value;
+                  updateField(key, updated);
+                }}
+                className="mb-1 w-full"
+                placeholder={key.slice(0, -1)}
+              />
+            ))}
+          </div>
+        ))}
+
+        {formData.projects?.map((proj, index) => (
+          <div key={index} className="border p-2 rounded">
+            <input
+              className="mb-1 w-full"
+              type="text"
+              placeholder="Project Title"
+              value={proj.title}
+              onChange={(e) => {
+                const updated = [...formData.projects!];
+                updated[index].title = e.target.value;
+                updateField("projects", updated);
+              }}
+            />
+            <input
+              className="mb-1 w-full"
+              type="text"
+              placeholder="Live Link"
+              value={proj.liveLink}
+              onChange={(e) => {
+                const updated = [...formData.projects!];
+                updated[index].liveLink = e.target.value;
+                updateField("projects", updated);
+              }}
+            />
+            <input
+              className="mb-1 w-full"
+              type="text"
+              placeholder="Frontend Repo"
+              value={proj.frontendRepo}
+              onChange={(e) => {
+                const updated = [...formData.projects!];
+                updated[index].frontendRepo = e.target.value;
+                updateField("projects", updated);
+              }}
+            />
+            <input
+              className="mb-1 w-full"
+              type="text"
+              placeholder="Backend Repo"
+              value={proj.backendRepo}
+              onChange={(e) => {
+                const updated = [...formData.projects!];
+                updated[index].backendRepo = e.target.value;
+                updateField("projects", updated);
+              }}
+            />
+            <label className="font-semibold block">Descriptions</label>
+            {proj.descriptions?.map((desc, i) => (
+              <textarea
+                key={i}
+                className="mb-1 w-full"
+                placeholder="Description"
+                value={desc.description}
+                onChange={(e) => {
+                  const updated = [...formData.projects!];
+                  updated[index].descriptions[i].description = e.target.value;
+                  updateField("projects", updated);
+                }}
+              />
+            ))}
+          </div>
+        ))}
+
+        {formData.experiences?.map((exp, index) => (
+          <div key={index} className="border p-2 rounded">
+            <input
+              className="mb-1 w-full"
+              type="text"
+              placeholder="Company"
+              value={exp.company}
+              onChange={(e) => {
+                const updated = [...formData.experiences!];
+                updated[index].company = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="mb-1 w-full"
+              type="text"
+              placeholder="Role"
+              value={exp.role}
+              onChange={(e) => {
+                const updated = [...formData.experiences!];
+                updated[index].role = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="mb-1 w-full"
+              type="text"
+              placeholder="Year"
+              value={exp.year}
+              onChange={(e) => {
+                const updated = [...formData.experiences!];
+                updated[index].year = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <label className="font-semibold block">Descriptions</label>
+            {exp.descriptions?.map((desc, i) => (
+              <textarea
+                key={i}
+                className="mb-1 w-full"
+                placeholder="Description"
+                value={desc.description}
+                onChange={(e) => {
+                  const updated = [...formData.experiences!];
+                  updated[index].descriptions[i].description = e.target.value;
+                  updateField("experiences", updated);
+                }}
+              />
+            ))}
           </div>
         ))}
       </div>
 
-      <button
-        type="submit"
-        className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        💾 Save Changes
-      </button>
-    </form>
+      <div className="text-center mt-6">
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
+        >
+          {saving ? "Saving..." : "💾 Save Changes"}
+        </button>
+      </div>
+    </div>
   );
 }

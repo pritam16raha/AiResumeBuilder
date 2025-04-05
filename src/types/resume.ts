@@ -16,6 +16,61 @@ export type ExperienceItem = {
   customPrompt?: string;
 };
 
+export type ExperienceItemForEditForm = {
+  id: string;
+  company: string;
+  role: string;
+  year: string;
+  descriptions: {
+    id: string;
+    description: string;
+  }[];
+};
+
+export type ResumeEditData = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  summary: string;
+  skills: string[];
+  education: {
+    degree: string;
+    institution: string;
+    year: string;
+  }[];
+  certifications: string[];
+  languages: string[];
+  awards: string[];
+  hobbies: string[];
+  references: string[];
+  projects: {
+    id: string;
+    title: string;
+    techStack: string[];
+    liveLink: string;
+    frontendRepo: string;
+    backendRepo: string;
+    descriptions: {
+      id: string;
+      description: string;
+    }[];
+  }[];
+  experiences: {
+    id: string;
+    company: string;
+    role: string;
+    year: string;
+    descriptions: {
+      id: string;
+      description: string;
+    }[];
+  }[];
+};
+
+
+
+
 // src/types/resume.ts (or wherever you define types)
 
 export type ExperienceFormItem = {
