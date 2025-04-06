@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handlePrint } from "@/utils/printSection";
+import { Editor } from "@tinymce/tinymce-react";
 
 type EducationItem = {
   degree: string;
@@ -233,6 +234,18 @@ export default function CoverLetterClient({ resumeId }: { resumeId: string }) {
           >
             🖨️ Print Cover Letter
           </button>
+
+          <Editor
+            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+            initialValue={coverLetter}
+            init={{
+              height: 500,
+              menubar: true,
+              toolbar:
+                "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code",
+              branding: false,
+            }}
+          />
         </div>
       )}
     </div>
