@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function TemplateThree({ resume }: { resume: Resume }) {
+export default function TemplateThree({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-6xl mx-auto p-8 bg-white border rounded shadow-md text-gray-800">
       {/* Header */}

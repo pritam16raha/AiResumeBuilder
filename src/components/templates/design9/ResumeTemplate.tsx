@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import type { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function TemplateFive({ resume }: { resume: Resume }) {
+export default function TemplateFive({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-5xl mx-auto my-10 bg-white shadow-md rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-3">
       {/* Sidebar */}

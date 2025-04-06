@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import type { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function TemplateSix({ resume }: { resume: Resume }) {
+export default function TemplateSix({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-3xl mx-auto my-10 bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
       {/* Header */}

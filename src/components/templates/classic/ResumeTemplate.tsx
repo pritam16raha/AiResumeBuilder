@@ -1,8 +1,8 @@
 "use client";
 
-import { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function ClassicTemplate({ resume }: { resume: Resume }) {
+export default function ClassicTemplate({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md border border-gray-200">
       {/* Header */}

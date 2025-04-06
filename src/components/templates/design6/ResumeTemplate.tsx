@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function ModernSidebarResume({ resume }: { resume: Resume }) {
+export default function ModernSidebarResume({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-5xl mx-auto grid grid-cols-4 gap-6 p-8 bg-white shadow-lg border rounded-lg">
       {/* Sidebar */}

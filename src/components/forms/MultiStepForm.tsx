@@ -54,7 +54,8 @@ export default function MultiStepForm() {
           updateFormData={updateFormData}
         />
       )}
-      {step === 3 && <StepThree prev={prev} data={formData} />}
+      {step === 3 && <StepThree prev={prev} />}
+      {/* data={formData} */}
     </div>
   );
 }

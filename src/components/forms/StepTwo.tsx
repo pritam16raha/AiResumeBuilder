@@ -1,13 +1,15 @@
 "use client";
 
 import { useResumeForm } from "@/context/ResumeFormContext";
-import { EducationItem, ProjectItem } from "@/types/resume";
+import { EducationItem, ProjectItem, ResumeFormData } from "@/types/resume";
 import axios from "axios";
 import { useMemo, useState } from "react";
 
 type Props = {
   next: () => void;
   prev: () => void;
+  data: ResumeFormData; // Include data of type ResumeFormData
+  updateFormData: (data: Partial<ResumeFormData>) => void; // Function to update form data
 };
 
 export default function StepTwo({ next, prev }: Props) {
@@ -20,26 +22,26 @@ export default function StepTwo({ next, prev }: Props) {
   //   year: "",
   // };
 
-const projects = useMemo(() => {
-  return data.projects?.length
-    ? data.projects
-    : [
-        {
-          title: "",
-          techStack: [],
-          description: "",
-          liveLink: "",
-          frontendRepo: "",
-          backendRepo: "",
-        },
-      ];
-}, [data.projects]);
+  const projects = useMemo(() => {
+    return data.projects?.length
+      ? data.projects
+      : [
+          {
+            title: "",
+            techStack: [],
+            description: "",
+            liveLink: "",
+            frontendRepo: "",
+            backendRepo: "",
+          },
+        ];
+  }, [data.projects]);
 
-const educationList = useMemo(() => {
-  return data.education?.length
-    ? data.education
-    : [{ degree: "", institution: "", year: "" }];
-}, [data.education]);
+  const educationList = useMemo(() => {
+    return data.education?.length
+      ? data.education
+      : [{ degree: "", institution: "", year: "" }];
+  }, [data.education]);
 
   const handleEduChange = (
     index: number,

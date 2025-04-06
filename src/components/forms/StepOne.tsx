@@ -3,9 +3,12 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import { useResumeForm } from "@/context/ResumeFormContext";
+import { ResumeFormData } from "@/types/resume";
 
 type Props = {
   next: () => void;
+  data: ResumeFormData; // Add this line
+  updateFormData: (data: Partial<ResumeFormData>) => void; // Add this line
 };
 
 export default function StepOne({ next }: Props) {

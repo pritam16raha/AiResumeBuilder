@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import type { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function ElegantTemplate({ resume }: { resume: Resume }) {
+export default function ElegantTemplate({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-md px-8 py-10 text-gray-800 space-y-8">
       {/* Name & Contact */}

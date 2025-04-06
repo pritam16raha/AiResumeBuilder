@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import type { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function Professional1Template({ resume }: { resume: Resume }) {
+export default function Professional1Template({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white text-gray-900 grid grid-cols-3 gap-6 border border-gray-300 shadow-md rounded-xl">
       {/* Left Sidebar */}

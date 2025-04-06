@@ -142,7 +142,7 @@ export type Resume = {
   skills: string[];
   education: {
     degree: string;
-    institution?: string;
+    institution: string;
     year: string;
   }[];
   role?: string | null;

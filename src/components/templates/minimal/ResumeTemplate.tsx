@@ -1,9 +1,23 @@
 "use client";
 
-import React from "react";
-import { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function MinimalTemplate({ resume }: { resume: Resume }) {
+const customFieldKeys = [
+  "certifications",
+  "languages",
+  "awards",
+  "hobbies",
+  "references",
+] as const;
+
+type CustomFieldKey = (typeof customFieldKeys)[number];
+type CustomFieldMap = { key: CustomFieldKey; label: string };
+
+export default function MinimalTemplate({
+  resume,
+}: {
+  resume: ViewableResume;
+}) {
   return (
     <div className="max-w-3xl mx-auto py-12 px-6 text-gray-900 space-y-10 font-sans">
       {/* Name & Contact */}
@@ -126,7 +140,7 @@ export default function MinimalTemplate({ resume }: { resume: Resume }) {
       )}
 
       {/* Custom Fields */}
-      {[
+      {/* {[
         { key: "certifications", label: "Certifications" },
         { key: "languages", label: "Languages" },
         { key: "awards", label: "Awards" },
@@ -144,7 +158,29 @@ export default function MinimalTemplate({ resume }: { resume: Resume }) {
               </ul>
             </section>
           )
-      )}
+      )} */}
+      {customFieldKeys
+        .map((key): CustomFieldMap => {
+          return {
+            key,
+            label: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize
+          };
+        })
+        .map(({ key, label }) => {
+          const field = resume[key];
+          if (!field || field.length === 0) return null;
+
+          return (
+            <section key={key}>
+              <h2 className="text-lg font-semibold mb-1">{label}</h2>
+              <ul className="list-disc list-inside text-sm ml-4">
+                {field.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          );
+        })}
     </div>
   );
 }

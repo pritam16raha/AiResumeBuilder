@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import type { Resume } from "@/types/resume";
+import { ViewableResume } from "@/types/viewableResume";
 
-export default function TemplateFour({ resume }: { resume: Resume }) {
+export default function TemplateFour({ resume }: { resume: ViewableResume }) {
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg border border-gray-200">
       {/* Header */}
