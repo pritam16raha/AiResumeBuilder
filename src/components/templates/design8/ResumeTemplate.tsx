@@ -87,9 +87,9 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
               <p className="text-sm font-medium text-gray-800">
                 {proj.title} — {proj.techStack.join(", ")}
               </p>
-              {proj.descriptions && (
+              {proj.description && (
                 <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
-                  {proj.descriptions.split("\n").map((line, idx) => (
+                  {proj.description.split("\n").map((line, idx) => (
                     <li key={idx}>{line}</li>
                   ))}
                 </ul>

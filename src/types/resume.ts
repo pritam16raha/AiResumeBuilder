@@ -121,7 +121,7 @@ export type Project = {
   frontendRepo?: string;
   backendRepo?: string;
   createdAt: string;
-  descriptions: string;
+  description: string;
 };
 
 export type Resume = {

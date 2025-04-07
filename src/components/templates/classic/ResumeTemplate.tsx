@@ -103,7 +103,12 @@ export default function ClassicTemplate({ resume }: { resume: Resume }) {
               <p className="font-medium text-gray-800">
                 {proj.title} ({proj.techStack.join(", ")})
               </p>
-              <p className="ml-4 text-gray-700">{proj.descriptions}</p>
+
+              {/* ✅ Corrected */}
+              <p className="ml-4 text-gray-700 whitespace-pre-wrap">
+                {proj.description}
+              </p>
+
               {proj.liveLink && (
                 <p>
                   🔗 Live:{" "}
@@ -111,6 +116,7 @@ export default function ClassicTemplate({ resume }: { resume: Resume }) {
                     href={proj.liveLink}
                     target="_blank"
                     className="text-blue-600 underline"
+                    rel="noopener noreferrer"
                   >
                     {proj.liveLink}
                   </a>
@@ -123,6 +129,7 @@ export default function ClassicTemplate({ resume }: { resume: Resume }) {
                     href={proj.frontendRepo}
                     target="_blank"
                     className="text-blue-600 underline"
+                    rel="noopener noreferrer"
                   >
                     {proj.frontendRepo}
                   </a>
@@ -135,6 +142,7 @@ export default function ClassicTemplate({ resume }: { resume: Resume }) {
                     href={proj.backendRepo}
                     target="_blank"
                     className="text-blue-600 underline"
+                    rel="noopener noreferrer"
                   >
                     {proj.backendRepo}
                   </a>

@@ -89,9 +89,9 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
               <p className="text-gray-600 mb-1">
                 Tech Stack: {proj.techStack.join(", ")}
               </p>
-              {proj.descriptions && (
+              {proj.description && (
                 <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
-                  {proj.descriptions.split("\n").map((line, idx) => (
+                  {proj.description.split("\n").map((line, idx) => (
                     <li key={idx}>{line}</li>
                   ))}
                 </ul>

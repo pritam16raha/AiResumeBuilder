@@ -1,12 +1,12 @@
 // src/app/api/ai/generate-cover-letter/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai"; // or OpenAI if you're using that
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { z } from "zod";
 
-// ✅ Schema validation
+// ✅ Updated schema with new structure
 const inputSchema = z.object({
-  fullName: z.string(), // keep this required if you always need it
+  fullName: z.string(),
   education: z.array(
     z.object({
       degree: z.string(),
@@ -19,17 +19,12 @@ const inputSchema = z.object({
       company: z.string(),
       role: z.string(),
       year: z.string(),
-      descriptions: z.array(
-        z.object({
-          description: z.string(),
-        })
-      ),
+      description: z.string(), // ✅ updated here
     })
   ),
-  role: z.string().nullable().optional(), // ✅ fixed
+  role: z.string().nullable().optional(),
   prompt: z.string().optional(),
 });
-
 
 // ✅ AI setup
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
@@ -48,9 +43,7 @@ export async function POST(req: NextRequest) {
     const expText = experience
       .map(
         (exp) =>
-          `${exp.role} at ${exp.company} (${exp.year})\n- ${exp.descriptions
-            .map((d) => d.description)
-            .join("\n- ")}`
+          `${exp.role} at ${exp.company} (${exp.year})\n- ${exp.description}`
       )
       .join("\n\n");
 

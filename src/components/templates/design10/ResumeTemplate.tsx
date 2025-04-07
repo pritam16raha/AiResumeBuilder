@@ -98,9 +98,9 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
                   {proj.techStack.join(", ")}
                 </span>
               </p>
-              {proj.descriptions && (
+              {proj.description && (
                 <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                  {proj.descriptions.split("\n").map((line, idx) => (
+                  {proj.description.split("\n").map((line, idx) => (
                     <li key={idx}>{line}</li>
                   ))}
                 </ul>

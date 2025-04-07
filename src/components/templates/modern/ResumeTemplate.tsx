@@ -88,7 +88,7 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
                 <p className="text-sm text-gray-600 mb-1">
                   Tech Stack: {proj.techStack.join(", ")}
                 </p>
-                <p className="ml-4 text-sm text-gray-700">{proj.descriptions}</p>
+                <p className="ml-4 text-sm text-gray-700">{proj.description}</p>
                 {/* Links for live and repos */}
               </div>
             ))}

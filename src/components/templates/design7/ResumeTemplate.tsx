@@ -85,9 +85,9 @@ export default function TemplateThree({ resume }: { resume: Resume }) {
                 <p className="font-semibold">
                   {proj.title} ({proj.techStack.join(", ")})
                 </p>
-                {proj.descriptions && (
+                {proj.description && (
                   <ul className="list-disc list-inside ml-4 text-sm">
-                    {proj.descriptions.split("\n").map((line, idx) => (
+                    {proj.description.split("\n").map((line, idx) => (
                       <li key={idx}>{line}</li>
                     ))}
                   </ul>

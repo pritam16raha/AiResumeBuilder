@@ -162,7 +162,7 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
                   </span>
                 </p>
                 <p className="text-sm mt-1 whitespace-pre-line">
-                  {proj.descriptions}
+                  {proj.description}
                 </p>
                 <div className="text-sm mt-1 space-y-1">
                   {proj.liveLink && (

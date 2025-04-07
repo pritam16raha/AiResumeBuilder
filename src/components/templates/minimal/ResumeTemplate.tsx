@@ -90,9 +90,9 @@ export default function MinimalTemplate({ resume }: { resume: Resume }) {
                 <p className="text-sm italic mb-1">
                   {proj.techStack.join(", ")}
                 </p>
-                {proj.descriptions && (
+                {proj.description && (
                   <ul className="list-disc list-inside text-sm ml-4">
-                    {proj.descriptions.split("\n").map((line, idx) => (
+                    {proj.description.split("\n").map((line, idx) => (
                       <li key={idx}>{line}</li>
                     ))}
                   </ul>

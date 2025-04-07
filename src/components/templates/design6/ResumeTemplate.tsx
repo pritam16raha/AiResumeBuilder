@@ -120,9 +120,9 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
                   <p>
                     <strong>{proj.title}</strong> ({proj.techStack.join(", ")})
                   </p>
-                  {proj.descriptions && (
+                  {proj.description && (
                     <ul className="list-disc list-inside ml-4 text-sm text-gray-600">
-                      {proj.descriptions.split("\n").map((line, idx) => (
+                      {proj.description.split("\n").map((line, idx) => (
                         <li key={idx}>{line}</li>
                       ))}
                     </ul>

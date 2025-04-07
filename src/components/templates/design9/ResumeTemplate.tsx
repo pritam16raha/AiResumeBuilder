@@ -126,9 +126,9 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
                     {proj.techStack.join(", ")}
                   </span>
                 </p>
-                {proj.descriptions && (
+                {proj.description && (
                   <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                    {proj.descriptions.split("\n").map((point, idx) => (
+                    {proj.description.split("\n").map((point, idx) => (
                       <li key={idx}>{point}</li>
                     ))}
                   </ul>
