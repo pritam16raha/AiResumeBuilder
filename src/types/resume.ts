@@ -49,20 +49,14 @@ export type ResumeEditData = {
     liveLink: string;
     frontendRepo: string;
     backendRepo: string;
-    descriptions: {
-      id: string;
-      description: string;
-    }[];
+    description: string;
   }[];
   experiences: {
     id: string;
     company: string;
     role: string;
     year: string;
-    descriptions: {
-      id: string;
-      description: string;
-    }[];
+    description: string;
   }[];
 };
 

@@ -33,12 +33,8 @@ export async function GET(request: NextRequest) {
     const resume = await db.query.resumes.findFirst({
       where: eq(resumes.id, resumeId),
       with: {
-        experiences: {
-          with: { descriptions: true },
-        },
-        projects: {
-          with: { descriptions: true },
-        },
+        experiences: true, // ⬅️ No descriptions needed
+        projects: true, // ⬅️ No descriptions needed
       },
     });
 

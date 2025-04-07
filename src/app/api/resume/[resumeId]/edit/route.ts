@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/verifyToken";
 import { z } from "zod";
-import { experienceDescriptions, projectDescriptions } from "@/db/schema";
+
 
 // ✨ Zod schema to validate incoming data
 const editResumeSchema = z.object({
@@ -39,12 +39,7 @@ const editResumeSchema = z.object({
         liveLink: z.string().optional(),
         frontendRepo: z.string().optional(),
         backendRepo: z.string().optional(),
-        descriptions: z.array(
-          z.object({
-            id: z.string().uuid(),
-            description: z.string(),
-          })
-        ),
+        description: z.string(),
       })
     )
     .optional(),
@@ -56,12 +51,7 @@ const editResumeSchema = z.object({
         company: z.string(),
         role: z.string(),
         year: z.string(),
-        descriptions: z.array(
-          z.object({
-            id: z.string().uuid(),
-            description: z.string(),
-          })
-        ),
+        description: z.string(),
       })
     )
     .optional(),
@@ -100,7 +90,7 @@ export async function PUT(
     // ✅ Update main resume data
     await db.update(resumes).set(parsed).where(eq(resumes.id, resumeId));
 
-    // ✅ Update projects and their descriptions
+    // ✅ Update projects
     if (parsed.projects) {
       for (const project of parsed.projects) {
         await db
@@ -111,20 +101,13 @@ export async function PUT(
             liveLink: project.liveLink || "",
             frontendRepo: project.frontendRepo || "",
             backendRepo: project.backendRepo || "",
+            description: project.description, // ⬅️ single string update
           })
           .where(eq(projects.id, project.id));
-
-        // Update each description
-        for (const desc of project.descriptions) {
-          await db
-            .update(projectDescriptions)
-            .set({ description: desc.description })
-            .where(eq(projectDescriptions.id, desc.id));
-        }
       }
     }
 
-    // ✅ Update experiences and their descriptions
+    // ✅ Update experiences
     if (parsed.experiences) {
       for (const exp of parsed.experiences) {
         await db
@@ -133,15 +116,9 @@ export async function PUT(
             company: exp.company,
             role: exp.role,
             year: exp.year,
+            description: exp.description, // ⬅️ single string update
           })
           .where(eq(experiences.id, exp.id));
-
-        for (const desc of exp.descriptions) {
-          await db
-            .update(experienceDescriptions)
-            .set({ description: desc.description })
-            .where(eq(experienceDescriptions.id, desc.id));
-        }
       }
     }
 
