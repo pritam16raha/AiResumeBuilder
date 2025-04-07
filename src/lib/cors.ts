@@ -1,10 +1,25 @@
-// lib/cors.ts
-import Cors from "cors";
+// src/lib/cors.ts
+import { NextRequest, NextResponse } from "next/server";
 
-// You can change origin to a specific domain like "https://pritamraha.in"
-const cors = Cors({
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: "*", // Or use exact domain instead of "*"
-});
+export function withCors(req: NextRequest, res: NextResponse) {
+  const allowedOrigins = [
+    "https://ai-resume-builder-eight-blond.vercel.app/", // your frontend URL
+    "http://localhost:3000", // for local development
+  ];
 
-export default cors;
+  const origin = req.headers.get("origin");
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.headers.set("Access-Control-Allow-Origin", origin);
+    res.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    res.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+  }
+
+  return res;
+}
