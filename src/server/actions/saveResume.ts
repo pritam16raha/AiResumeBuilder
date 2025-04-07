@@ -1,9 +1,7 @@
 import { db } from "@/db";
 import { resumes } from "@/db/schema/resumes";
 import { projects } from "@/db/schema/projects";
-import { projectDescriptions } from "@/db/schema/projectDescriptions";
 import { experiences } from "@/db/schema/experiences";
-import { experienceDescriptions } from "@/db/schema/experienceDescriptions";
 
 type ResumePayload = {
   userId: string;
@@ -33,7 +31,6 @@ type ResumePayload = {
     customPrompt?: string;
   }[];
 
-  // ✅ Add these custom fields:
   certifications?: string[];
   languages?: string[];
   awards?: string[];
@@ -63,55 +60,32 @@ export async function saveResume(data: ResumePayload) {
 
   const resumeId = resumeResult[0].id;
 
-  // Step 2: Save projects and their descriptions
+  // Step 2: Save projects
   if (data.projects && data.projects.length > 0) {
     for (const project of data.projects) {
-      const { description, ...projectData } = project;
-
-      const insertedProjects = await db
-        .insert(projects)
-        .values({
-          resumeId,
-          userId: data.userId,
-          ...projectData,
-        })
-        .returning({ id: projects.id });
-
-      const projectId = insertedProjects[0].id;
-
-      if (description) {
-        await db.insert(projectDescriptions).values({
-          projectId,
-          description,
-        });
-      }
+      await db.insert(projects).values({
+        resumeId,
+        userId: data.userId,
+        ...project,
+      });
     }
   }
 
-  // Step 3: Save experiences and their descriptions
+  // Step 3: Save experiences
+  // Step 3: Save experiences
   if (data.experience && data.experience.length > 0) {
     for (const exp of data.experience) {
-      const { description, ...expData } = exp;
-
-      const insertedExperiences = await db
+      await db
         .insert(experiences)
         .values({
-          resumeId,
           userId: data.userId,
-          ...expData,
+          resumeId: resumeId,
+          company: exp.company,
+          role: exp.role,
+          year: exp.year,
+          description: exp.description || "", // Make sure to include `description`
         })
-        .returning({ id: experiences.id });
-
-      const experienceId = insertedExperiences[0].id;
-
-      if (description) {
-        await db.insert(experienceDescriptions).values({
-          experienceId,
-          description,
-        });
-      }
+        .execute();
     }
   }
-
-  return { success: true };
 }

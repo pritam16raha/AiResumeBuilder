@@ -1,8 +1,8 @@
 "use client";
 
-import { ViewableResume } from "@/types/viewableResume";
+import { Resume } from "@/types/resume";
 
-export default function TemplateSix({ resume }: { resume: ViewableResume }) {
+export default function TemplateSix({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-3xl mx-auto my-10 bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
       {/* Header */}
@@ -23,7 +23,9 @@ export default function TemplateSix({ resume }: { resume: ViewableResume }) {
           <h2 className="text-xl font-semibold text-purple-700 mb-2">
             ✨ Summary
           </h2>
-          <p className="text-gray-700 text-sm">{resume.summary}</p>
+          <p className="text-gray-700 text-sm whitespace-pre-wrap">
+            {resume.summary}
+          </p>
         </div>
       )}
 
@@ -70,11 +72,13 @@ export default function TemplateSix({ resume }: { resume: ViewableResume }) {
               <p className="font-medium text-gray-800">
                 {exp.role} @ {exp.company} ({exp.year})
               </p>
-              <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                {exp.descriptions.map((desc) => (
-                  <li key={desc.id}>{desc.description}</li>
-                ))}
-              </ul>
+              {exp.description && (
+                <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
+                  {exp.description.split("\n").map((point, idx) => (
+                    <li key={idx}>{point}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
@@ -94,11 +98,13 @@ export default function TemplateSix({ resume }: { resume: ViewableResume }) {
                   {proj.techStack.join(", ")}
                 </span>
               </p>
-              <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                {proj.descriptions.map((desc) => (
-                  <li key={desc.id}>{desc.description}</li>
-                ))}
-              </ul>
+              {proj.descriptions && (
+                <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
+                  {proj.descriptions.split("\n").map((line, idx) => (
+                    <li key={idx}>{line}</li>
+                  ))}
+                </ul>
+              )}
               <div className="text-xs mt-1 space-x-3 text-blue-600">
                 {proj.liveLink && (
                   <a

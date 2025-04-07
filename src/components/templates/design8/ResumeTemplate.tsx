@@ -1,8 +1,8 @@
 "use client";
 
-import { ViewableResume } from "@/types/viewableResume";
+import { Resume } from "@/types/resume";
 
-export default function TemplateFour({ resume }: { resume: ViewableResume }) {
+export default function TemplateFour({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg border border-gray-200">
       {/* Header */}
@@ -17,7 +17,7 @@ export default function TemplateFour({ resume }: { resume: ViewableResume }) {
       {resume.summary && (
         <section className="mb-6">
           <h2 className="text-lg font-semibold text-blue-600 mb-1">Summary</h2>
-          <p className="text-gray-700">{resume.summary}</p>
+          <p className="text-gray-700 whitespace-pre-wrap">{resume.summary}</p>
         </section>
       )}
 
@@ -66,11 +66,13 @@ export default function TemplateFour({ resume }: { resume: ViewableResume }) {
               <p className="text-sm font-medium text-gray-800">
                 {exp.role} @ {exp.company} ({exp.year})
               </p>
-              <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
-                {exp.descriptions.map((desc) => (
-                  <li key={desc.id}>{desc.description}</li>
-                ))}
-              </ul>
+              {exp.description && (
+                <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
+                  {exp.description.split("\n").map((line, idx) => (
+                    <li key={idx}>{line}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </section>
@@ -85,11 +87,13 @@ export default function TemplateFour({ resume }: { resume: ViewableResume }) {
               <p className="text-sm font-medium text-gray-800">
                 {proj.title} — {proj.techStack.join(", ")}
               </p>
-              <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
-                {proj.descriptions.map((desc) => (
-                  <li key={desc.id}>{desc.description}</li>
-                ))}
-              </ul>
+              {proj.descriptions && (
+                <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
+                  {proj.descriptions.split("\n").map((line, idx) => (
+                    <li key={idx}>{line}</li>
+                  ))}
+                </ul>
+              )}
               <div className="text-sm text-blue-600 mt-1 space-x-2">
                 {proj.liveLink && (
                   <a
@@ -135,7 +139,8 @@ export default function TemplateFour({ resume }: { resume: ViewableResume }) {
         ] as const
       ).map(
         ({ key, label }) =>
-          (resume[key] as string[])?.length > 0 && (
+          Array.isArray(resume[key]) &&
+          resume[key]?.length > 0 && (
             <section key={key} className="mb-6">
               <h2 className="text-lg font-semibold text-blue-600 mb-1">
                 {label}

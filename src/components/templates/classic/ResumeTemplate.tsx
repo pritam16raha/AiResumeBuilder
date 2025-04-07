@@ -1,8 +1,8 @@
 "use client";
 
-import { ViewableResume } from "@/types/viewableResume";
+import { Resume } from "@/types/resume";
 
-export default function ClassicTemplate({ resume }: { resume: ViewableResume }) {
+export default function ClassicTemplate({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md border border-gray-200">
       {/* Header */}
@@ -86,11 +86,7 @@ export default function ClassicTemplate({ resume }: { resume: ViewableResume }) 
               <p className="font-medium text-gray-800">
                 {exp.role} @ {exp.company} ({exp.year})
               </p>
-              <ul className="list-disc list-inside ml-4 text-gray-700">
-                {exp.descriptions?.map((desc) => (
-                  <li key={desc.id}>{desc.description}</li>
-                ))}
-              </ul>
+              <p className="ml-4 text-gray-700">{exp.description}</p>
             </div>
           ))}
         </section>
@@ -107,11 +103,7 @@ export default function ClassicTemplate({ resume }: { resume: ViewableResume }) 
               <p className="font-medium text-gray-800">
                 {proj.title} ({proj.techStack.join(", ")})
               </p>
-              <ul className="list-disc list-inside ml-4 text-gray-700">
-                {proj.descriptions?.map((desc) => (
-                  <li key={desc.id}>{desc.description}</li>
-                ))}
-              </ul>
+              <p className="ml-4 text-gray-700">{proj.descriptions}</p>
               {proj.liveLink && (
                 <p>
                   🔗 Live:{" "}

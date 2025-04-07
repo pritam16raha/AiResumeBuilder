@@ -1,4 +1,5 @@
 export type ExperienceDescription = {
+  id: string;
   description: string;
 };
 
@@ -12,7 +13,7 @@ export type ExperienceItem = {
   company: string;
   role: string;
   year: string;
-  description: string;
+  description: string; // Single string description
   customPrompt?: string;
 };
 
@@ -21,10 +22,7 @@ export type ExperienceItemForEditForm = {
   company: string;
   role: string;
   year: string;
-  descriptions: {
-    id: string;
-    description: string;
-  }[];
+  descriptions: string;
 };
 
 export type ResumeEditData = {
@@ -129,7 +127,7 @@ export type Project = {
   frontendRepo?: string;
   backendRepo?: string;
   createdAt: string;
-  descriptions: ProjectDescription[];
+  descriptions: string;
 };
 
 export type Resume = {

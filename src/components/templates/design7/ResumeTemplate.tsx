@@ -1,8 +1,8 @@
 "use client";
 
-import { ViewableResume } from "@/types/viewableResume";
+import { Resume } from "@/types/resume";
 
-export default function TemplateThree({ resume }: { resume: ViewableResume }) {
+export default function TemplateThree({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-6xl mx-auto p-8 bg-white border rounded shadow-md text-gray-800">
       {/* Header */}
@@ -17,7 +17,7 @@ export default function TemplateThree({ resume }: { resume: ViewableResume }) {
       {resume.summary && (
         <section className="mb-6">
           <h2 className="text-xl font-semibold border-b mb-2">📝 Summary</h2>
-          <p>{resume.summary}</p>
+          <p className="whitespace-pre-wrap">{resume.summary}</p>
         </section>
       )}
 
@@ -62,11 +62,13 @@ export default function TemplateThree({ resume }: { resume: ViewableResume }) {
                 <p className="font-semibold">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
-                <ul className="list-disc list-inside text-sm ml-4">
-                  {exp.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
+                {exp.description && (
+                  <ul className="list-disc list-inside text-sm ml-4">
+                    {exp.description.split("\n").map((line, idx) => (
+                      <li key={idx}>{line}</li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
           </div>
@@ -83,11 +85,13 @@ export default function TemplateThree({ resume }: { resume: ViewableResume }) {
                 <p className="font-semibold">
                   {proj.title} ({proj.techStack.join(", ")})
                 </p>
-                <ul className="list-disc list-inside ml-4 text-sm">
-                  {proj.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
+                {proj.descriptions && (
+                  <ul className="list-disc list-inside ml-4 text-sm">
+                    {proj.descriptions.split("\n").map((line, idx) => (
+                      <li key={idx}>{line}</li>
+                    ))}
+                  </ul>
+                )}
                 <div className="text-sm text-blue-600 mt-1 space-y-1">
                   {proj.liveLink && (
                     <p>
@@ -139,7 +143,8 @@ export default function TemplateThree({ resume }: { resume: ViewableResume }) {
         ] as const
       ).map(
         ({ key, label }) =>
-          (resume[key] as string[])?.length > 0 && (
+          Array.isArray(resume[key]) &&
+          resume[key]?.length > 0 && (
             <section key={key} className="mb-6">
               <h2 className="text-xl font-semibold border-b mb-2">{label}</h2>
               <ul className="list-disc list-inside text-sm ml-4">

@@ -1,8 +1,8 @@
 "use client";
 
-import { ViewableResume } from "@/types/viewableResume";
+import { Resume } from "@/types/resume";
 
-export default function Professional1Template({ resume }: { resume: ViewableResume }) {
+export default function Professional1Template({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white text-gray-900 grid grid-cols-3 gap-6 border border-gray-300 shadow-md rounded-xl">
       {/* Left Sidebar */}
@@ -46,7 +46,6 @@ export default function Professional1Template({ resume }: { resume: ViewableResu
         )}
 
         {/* Custom Fields */}
-
         {Array.isArray(resume.languages) && resume.languages.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
@@ -60,23 +59,21 @@ export default function Professional1Template({ resume }: { resume: ViewableResu
           </div>
         )}
 
-        {/* Certifications */}
-        {Array.isArray(resume.certifications) &&
-          resume.certifications.length > 0 && (
-            <div>
-              <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
-                Certifications
-              </h2>
-              <ul className="list-disc list-inside text-sm">
-                {resume.certifications.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+        {/* Custom Fields */}
+        {resume.certifications && resume.certifications.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
+              Certifications
+            </h2>
+            <ul className="list-disc list-inside text-sm">
+              {resume.certifications.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-        {/* Awards */}
-        {Array.isArray(resume.awards) && resume.awards.length > 0 && (
+        {resume.awards && resume.awards.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               Awards
@@ -89,8 +86,7 @@ export default function Professional1Template({ resume }: { resume: ViewableResu
           </div>
         )}
 
-        {/* Hobbies */}
-        {Array.isArray(resume.hobbies) && resume.hobbies.length > 0 && (
+        {resume.hobbies && resume.hobbies.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               Hobbies
@@ -103,8 +99,7 @@ export default function Professional1Template({ resume }: { resume: ViewableResu
           </div>
         )}
 
-        {/* References */}
-        {Array.isArray(resume.references) && resume.references.length > 0 && (
+        {resume.references && resume.references.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold border-b pb-1 border-gray-400 mb-2">
               References
@@ -145,11 +140,9 @@ export default function Professional1Template({ resume }: { resume: ViewableResu
                 <p className="font-semibold">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
-                <ul className="list-disc list-inside ml-4 text-sm">
-                  {exp.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
+                <p className="text-sm mt-1 whitespace-pre-line">
+                  {exp.description}
+                </p>
               </div>
             ))}
           </div>
@@ -168,12 +161,10 @@ export default function Professional1Template({ resume }: { resume: ViewableResu
                     ({proj.techStack.join(", ")})
                   </span>
                 </p>
-                <ul className="list-disc list-inside ml-4 text-sm">
-                  {proj.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
-                <div className="text-sm mt-1">
+                <p className="text-sm mt-1 whitespace-pre-line">
+                  {proj.descriptions}
+                </p>
+                <div className="text-sm mt-1 space-y-1">
                   {proj.liveLink && (
                     <p>
                       🔗 Live:{" "}

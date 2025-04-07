@@ -22,27 +22,15 @@ export async function GET(
     }
 
     const token = authHeader.split(" ")[1];
-    const user = verifyToken(token); // You need to create this function using jwt.verify()
+    const user = verifyToken(token);
 
     const resumeId = context.params.resumeId;
-
-    // const resume = await db.query.resumes.findFirst({
-    //   where: eq(resumes.id, resumeId),
-    // });
 
     const resume = await db.query.resumes.findFirst({
       where: eq(resumes.id, resumeId),
       with: {
-        projects: {
-          with: {
-            descriptions: true,
-          },
-        },
-        experiences: {
-          with: {
-            descriptions: true,
-          },
-        },
+        projects: true, // Adjusted to simply fetch projects without descriptions
+        experiences: true, // Adjusted to simply fetch experiences without descriptions
       },
     });
 

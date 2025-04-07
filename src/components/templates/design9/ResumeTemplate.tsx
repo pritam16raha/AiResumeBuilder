@@ -1,8 +1,8 @@
 "use client";
 
-import { ViewableResume } from "@/types/viewableResume";
+import { Resume } from "@/types/resume";
 
-export default function TemplateFive({ resume }: { resume: ViewableResume }) {
+export default function TemplateFive({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-5xl mx-auto my-10 bg-white shadow-md rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-3">
       {/* Sidebar */}
@@ -48,6 +48,7 @@ export default function TemplateFive({ resume }: { resume: ViewableResume }) {
           </div>
         )}
 
+        {/* Dynamic Sidebar Fields */}
         {(
           [
             { key: "certifications", label: "📜 Certifications" },
@@ -58,7 +59,8 @@ export default function TemplateFive({ resume }: { resume: ViewableResume }) {
           ] as const
         ).map(
           ({ key, label }) =>
-            (resume[key] as string[])?.length > 0 && (
+            Array.isArray(resume[key]) &&
+            resume[key]?.length > 0 && (
               <div key={key}>
                 <h2 className="font-semibold text-white border-b border-white mb-2">
                   {label}
@@ -75,15 +77,19 @@ export default function TemplateFive({ resume }: { resume: ViewableResume }) {
 
       {/* Main Content */}
       <main className="p-6 md:col-span-2 space-y-6">
+        {/* Summary */}
         {resume.summary && (
           <section>
             <h2 className="text-xl font-semibold text-gray-700 mb-2">
               📝 Summary
             </h2>
-            <p className="text-gray-800 text-sm">{resume.summary}</p>
+            <p className="text-gray-800 text-sm whitespace-pre-wrap">
+              {resume.summary}
+            </p>
           </section>
         )}
 
+        {/* Experience */}
         {resume.experiences?.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-gray-700 mb-2">
@@ -94,16 +100,19 @@ export default function TemplateFive({ resume }: { resume: ViewableResume }) {
                 <p className="font-medium text-gray-800">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
-                <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                  {exp.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
+                {exp.description && (
+                  <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
+                    {exp.description.split("\n").map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
           </section>
         )}
 
+        {/* Projects */}
         {resume.projects?.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-gray-700 mb-2">
@@ -117,11 +126,13 @@ export default function TemplateFive({ resume }: { resume: ViewableResume }) {
                     {proj.techStack.join(", ")}
                   </span>
                 </p>
-                <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                  {proj.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
+                {proj.descriptions && (
+                  <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
+                    {proj.descriptions.split("\n").map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                )}
                 <div className="text-xs text-blue-700 mt-1 space-x-2">
                   {proj.liveLink && (
                     <a

@@ -4,7 +4,6 @@ import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { resumes } from "./resumes";
 import { relations } from "drizzle-orm";
-import { experienceDescriptions } from "./experienceDescriptions";
 
 export const experiences = pgTable("experiences", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -17,6 +16,7 @@ export const experiences = pgTable("experiences", {
   company: text("company").notNull(),
   role: text("role").notNull(),
   year: text("year").notNull(),
+  description: text("description").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -32,7 +32,7 @@ export const experiences = pgTable("experiences", {
 //   descriptions: many(experienceDescriptions),
 // }));
 
-export const experienceRelations = relations(experiences, ({ one, many }) => ({
+export const experienceRelations = relations(experiences, ({ one }) => ({
   resume: one(resumes, {
     fields: [experiences.resumeId],
     references: [resumes.id],
@@ -41,7 +41,6 @@ export const experienceRelations = relations(experiences, ({ one, many }) => ({
     fields: [experiences.userId],
     references: [users.id],
   }),
-  descriptions: many(experienceDescriptions), // ✅ REQUIRED
 }));
 
 

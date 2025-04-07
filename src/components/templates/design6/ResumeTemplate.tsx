@@ -1,8 +1,8 @@
 "use client";
 
-import { ViewableResume } from "@/types/viewableResume";
+import { Resume } from "@/types/resume";
 
-export default function ModernSidebarResume({ resume }: { resume: ViewableResume }) {
+export default function ModernSidebarResume({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-5xl mx-auto grid grid-cols-4 gap-6 p-8 bg-white shadow-lg border rounded-lg">
       {/* Sidebar */}
@@ -40,7 +40,8 @@ export default function ModernSidebarResume({ resume }: { resume: ViewableResume
           ] as const
         ).map(
           ({ key, label }) =>
-            (resume[key] as string[])?.length > 0 && (
+            Array.isArray(resume[key]) &&
+            resume[key]?.length > 0 && (
               <div key={key}>
                 <h2 className="text-lg font-semibold text-gray-800">{label}</h2>
                 <ul className="list-disc list-inside text-sm mt-2">
@@ -59,7 +60,9 @@ export default function ModernSidebarResume({ resume }: { resume: ViewableResume
         {resume.summary && (
           <section>
             <h2 className="text-xl font-semibold text-gray-800">📝 Summary</h2>
-            <p className="text-gray-700 mt-2">{resume.summary}</p>
+            <p className="text-gray-700 mt-2 whitespace-pre-wrap">
+              {resume.summary}
+            </p>
           </section>
         )}
 
@@ -94,11 +97,13 @@ export default function ModernSidebarResume({ resume }: { resume: ViewableResume
                   <p>
                     <strong>{exp.role}</strong> @ {exp.company} ({exp.year})
                   </p>
-                  <ul className="list-disc list-inside ml-4 text-sm text-gray-600">
-                    {exp.descriptions.map((desc) => (
-                      <li key={desc.id}>{desc.description}</li>
-                    ))}
-                  </ul>
+                  {exp.description && (
+                    <ul className="list-disc list-inside ml-4 text-sm text-gray-600">
+                      {exp.description.split("\n").map((line, i) => (
+                        <li key={i}>{line}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               ))}
             </div>
@@ -115,11 +120,13 @@ export default function ModernSidebarResume({ resume }: { resume: ViewableResume
                   <p>
                     <strong>{proj.title}</strong> ({proj.techStack.join(", ")})
                   </p>
-                  <ul className="list-disc list-inside ml-4 text-sm text-gray-600">
-                    {proj.descriptions.map((desc) => (
-                      <li key={desc.id}>{desc.description}</li>
-                    ))}
-                  </ul>
+                  {proj.descriptions && (
+                    <ul className="list-disc list-inside ml-4 text-sm text-gray-600">
+                      {proj.descriptions.split("\n").map((line, idx) => (
+                        <li key={idx}>{line}</li>
+                      ))}
+                    </ul>
+                  )}
                   <div className="text-sm text-blue-600 mt-1 space-y-1">
                     {proj.liveLink && (
                       <p>

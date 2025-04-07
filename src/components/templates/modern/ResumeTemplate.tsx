@@ -70,11 +70,7 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
                 <p className="font-semibold">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
-                <ul className="list-disc list-inside text-sm text-gray-700 mt-1 ml-4">
-                  {exp.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
+                <p className="ml-4 text-sm text-gray-700">{exp.description}</p>
               </div>
             ))}
           </div>
@@ -92,52 +88,8 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
                 <p className="text-sm text-gray-600 mb-1">
                   Tech Stack: {proj.techStack.join(", ")}
                 </p>
-                <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                  {proj.descriptions.map((desc) => (
-                    <li key={desc.id}>{desc.description}</li>
-                  ))}
-                </ul>
-                <div className="mt-2 text-sm space-y-1">
-                  {proj.liveLink && (
-                    <p>
-                      🔗 Live:{" "}
-                      <a
-                        href={proj.liveLink}
-                        className="text-blue-600 underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {proj.liveLink}
-                      </a>
-                    </p>
-                  )}
-                  {proj.frontendRepo && (
-                    <p>
-                      🧑‍💻 Frontend:{" "}
-                      <a
-                        href={proj.frontendRepo}
-                        className="text-blue-600 underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {proj.frontendRepo}
-                      </a>
-                    </p>
-                  )}
-                  {proj.backendRepo && (
-                    <p>
-                      🧑‍💻 Backend:{" "}
-                      <a
-                        href={proj.backendRepo}
-                        className="text-blue-600 underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {proj.backendRepo}
-                      </a>
-                    </p>
-                  )}
-                </div>
+                <p className="ml-4 text-sm text-gray-700">{proj.descriptions}</p>
+                {/* Links for live and repos */}
               </div>
             ))}
           </div>
