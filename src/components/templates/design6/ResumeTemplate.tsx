@@ -4,9 +4,9 @@ import { Resume } from "@/types/resume";
 
 export default function ModernSidebarResume({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-5xl mx-auto grid grid-cols-4 gap-6 p-8 bg-white shadow-lg border rounded-lg">
+    <div className="w-[794px] h-[1123px] mx-auto grid grid-cols-4 gap-6 p-8 bg-white shadow-lg border rounded-lg">
       {/* Sidebar */}
-      <aside className="col-span-1 bg-slate-100 p-4 rounded-lg space-y-4">
+      <aside className="col-span-1 bg-slate-100 p-4 rounded-lg space-y-4 break-words overflow-hidden">
         {/* Contact Info */}
         <div>
           <h2 className="text-xl font-semibold text-gray-800">👤 Info</h2>

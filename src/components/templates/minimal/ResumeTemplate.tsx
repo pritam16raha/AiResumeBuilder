@@ -15,7 +15,7 @@ type CustomFieldMap = { key: CustomFieldKey; label: string };
 
 export default function MinimalTemplate({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-3xl mx-auto py-12 px-6 text-gray-900 space-y-10 font-sans">
+    <div className="w-[794px] h-[1123px] mx-auto py-12 px-6 text-gray-900 space-y-10 font-sans">
       {/* Name & Contact */}
       <div>
         <h1 className="text-4xl font-bold">{resume.fullName}</h1>

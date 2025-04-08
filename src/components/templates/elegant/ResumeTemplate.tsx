@@ -4,7 +4,7 @@ import { Resume } from "@/types/resume";
 
 export default function ElegantTemplate({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-md px-8 py-10 text-gray-800 space-y-8">
+    <div className="w-[794px] h-[1123px] mx-auto bg-white shadow-lg rounded-md px-8 py-10 text-gray-800 space-y-8">
       {/* Name & Contact */}
       <div className="text-center space-y-1">
         <h1 className="text-3xl font-bold">{resume.fullName}</h1>

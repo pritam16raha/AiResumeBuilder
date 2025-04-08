@@ -4,7 +4,7 @@ import { Resume } from "@/types/resume";
 
 export default function ClassicTemplate({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md border border-gray-200">
+    <div className="w-[794px] h-[1123px] mx-auto p-6 bg-white shadow-md border border-gray-200 ">
       {/* Header */}
       <header className="text-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">{resume.fullName}</h1>

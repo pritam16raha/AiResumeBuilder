@@ -5,7 +5,7 @@ import { Resume } from "@/types/resume";
 
 export default function ModernTemplate({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-5xl mx-auto bg-white text-gray-800 shadow-xl rounded-md px-10 py-12 space-y-10">
+    <div className="w-[794px] h-[1123px] mx-auto bg-white text-gray-800 shadow-xl rounded-md px-10 py-12 space-y-10">
       {/* Header */}
       <div className="border-b pb-4">
         <h1 className="text-4xl font-bold">{resume.fullName}</h1>

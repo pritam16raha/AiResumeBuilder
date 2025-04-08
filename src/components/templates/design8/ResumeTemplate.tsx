@@ -4,7 +4,7 @@ import { Resume } from "@/types/resume";
 
 export default function TemplateFour({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg border border-gray-200">
+    <div className="w-[794px] h-[1123px] mx-auto px-6 py-10 bg-white shadow-lg rounded-lg border border-gray-200">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">{resume.fullName}</h1>

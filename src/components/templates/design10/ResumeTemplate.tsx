@@ -4,7 +4,7 @@ import { Resume } from "@/types/resume";
 
 export default function TemplateSix({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-3xl mx-auto my-10 bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
+    <div className="w-[794px] h-[1123px] mx-auto my-10 bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
       {/* Header */}
       <div className="text-center mb-6 border-b pb-4">
         <h1 className="text-3xl font-bold text-gray-800">{resume.fullName}</h1>

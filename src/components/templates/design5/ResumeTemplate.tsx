@@ -4,7 +4,7 @@ import { Resume } from "@/types/resume";
 
 export default function Professional1Template({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white text-gray-900 grid grid-cols-3 gap-6 border border-gray-300 shadow-md rounded-xl">
+    <div className="w-[794px] h-[1123px] mx-auto p-6 bg-white text-gray-900 grid grid-cols-3 gap-6 border border-gray-300 shadow-md rounded-xl">
       {/* Left Sidebar */}
       <aside className="col-span-1 space-y-6">
         <div>

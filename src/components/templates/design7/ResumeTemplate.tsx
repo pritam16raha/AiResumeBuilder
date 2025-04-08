@@ -4,7 +4,7 @@ import { Resume } from "@/types/resume";
 
 export default function TemplateThree({ resume }: { resume: Resume }) {
   return (
-    <div className="max-w-6xl mx-auto p-8 bg-white border rounded shadow-md text-gray-800">
+    <div className="w-[794px] h-[1123px] mx-auto p-8 bg-white border rounded shadow-md text-gray-800">
       {/* Header */}
       <header className="text-center border-b pb-6 mb-6">
         <h1 className="text-3xl font-bold">{resume.fullName}</h1>

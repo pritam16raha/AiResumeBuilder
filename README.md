@@ -10,7 +10,7 @@ AI-powered Resume Builder with real-time preview, multi-template support, dynami
 
 ## 🚀 Live Demo
 
-👉 [https://ai-resume-builder.vercel.app](https://ai-resume-builder.vercel.app) *(Replace with your live link)*
+👉 [https://ai-resume-builder-jmu7.vercel.app/](https://ai-resume-builder-jmu7.vercel.app/) *(Replace with your live link)*
 
 ---
 
@@ -102,7 +102,15 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 ## 📸 Screenshots
 
-> Add screenshots of your resume templates, builder form, and cover letter generator here!
+![Home Page](<Screenshot 2025-04-08 131334.png>)\
+![AI Cover Letter Generator](<Screenshot 2025-04-08 131916-1.png>)
+![AI Summary Generator](<Screenshot 2025-04-08 132110.png>)
+![AI Project Description Generator](<Screenshot 2025-04-08 132505.png>)
+![AI Experience Description Generator](<Screenshot 2025-04-08 132606.png>)
+
+## 🚀 Database Table & Relation
+
+![DATABASE-Supabase](<supabase-schema-srfyktjobxlbtizbbfrp (4).png>)
 
 ---
 
