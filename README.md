@@ -10,7 +10,7 @@ AI-powered Resume Builder with real-time preview, multi-template support, dynami
 
 ## 🚀 Live Demo
 
-👉 [https://ai-resume-builder-jmu7.vercel.app/](https://ai-resume-builder-jmu7.vercel.app/) *(Replace with your live link)*
+👉 [https://ai-resume-builder-jmu7.vercel.app/](https://ai-resume-builder-jmu7.vercel.app/)
 
 ---
 
