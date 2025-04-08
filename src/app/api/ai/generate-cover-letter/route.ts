@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { z } from "zod";
 
-// ✅ Updated schema with new structure
+// ✅ Updated schema with optional startDate, endDate, and marks
 const inputSchema = z.object({
   fullName: z.string(),
   education: z.array(
@@ -12,6 +12,9 @@ const inputSchema = z.object({
       degree: z.string(),
       institution: z.string(),
       year: z.string(),
+      marks: z.string().optional(),
+      startDate: z.string().optional(),
+      endDate: z.string().optional(),
     })
   ),
   experience: z.array(
@@ -19,7 +22,9 @@ const inputSchema = z.object({
       company: z.string(),
       role: z.string(),
       year: z.string(),
-      description: z.string(), // ✅ updated here
+      description: z.string(),
+      startDate: z.string().optional(),
+      endDate: z.string().optional(),
     })
   ),
   role: z.string().nullable().optional(),
@@ -37,14 +42,24 @@ export async function POST(req: NextRequest) {
     const { fullName, education, experience, role, prompt } = parsed;
 
     const eduText = education
-      .map((e) => `${e.degree} from ${e.institution} (${e.year})`)
+      .map((e) => {
+        const duration =
+          e.startDate || e.endDate
+            ? ` (${e.startDate || "N/A"} – ${e.endDate || "N/A"})`
+            : "";
+        const marks = e.marks ? ` - Marks: ${e.marks}` : "";
+        return `${e.degree} from ${e.institution} (${e.year})${duration}${marks}`;
+      })
       .join("\n");
 
     const expText = experience
-      .map(
-        (exp) =>
-          `${exp.role} at ${exp.company} (${exp.year})\n- ${exp.description}`
-      )
+      .map((exp) => {
+        const duration =
+          exp.startDate || exp.endDate
+            ? ` (${exp.startDate || "N/A"} – ${exp.endDate || "N/A"})`
+            : "";
+        return `${exp.role} at ${exp.company} (${exp.year})${duration}\n- ${exp.description}`;
+      })
       .join("\n\n");
 
     const finalPrompt = `

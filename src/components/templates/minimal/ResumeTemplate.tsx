@@ -46,11 +46,19 @@ export default function MinimalTemplate({ resume }: { resume: Resume }) {
       {resume.education?.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold mb-1">Education</h2>
-          <div className="space-y-1">
+          <div className="space-y-2">
             {resume.education.map((edu, index) => (
-              <p key={index} className="text-sm">
-                {edu.degree}, {edu.institution} ({edu.year})
-              </p>
+              <div key={index} className="text-sm">
+                <p className="font-medium">
+                  {edu.degree}, {edu.institution} ({edu.year})
+                </p>
+                {edu.marks && <p className="text-xs">📊 Marks: {edu.marks}</p>}
+                {(edu.startDate || edu.endDate) && (
+                  <p className="text-xs text-gray-600">
+                    📅 {edu.startDate} – {edu.endDate}
+                  </p>
+                )}
+              </div>
             ))}
           </div>
         </section>
@@ -62,12 +70,17 @@ export default function MinimalTemplate({ resume }: { resume: Resume }) {
           <h2 className="text-lg font-semibold mb-1">Experience</h2>
           <div className="space-y-3">
             {resume.experiences.map((exp, i) => (
-              <div key={i}>
-                <p className="font-medium text-sm">
+              <div key={i} className="text-sm">
+                <p className="font-medium">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
+                {(exp.startDate || exp.endDate) && (
+                  <p className="text-xs text-gray-600">
+                    📅 {exp.startDate} – {exp.endDate}
+                  </p>
+                )}
                 {exp.description && (
-                  <ul className="list-disc list-inside text-sm ml-4">
+                  <ul className="list-disc list-inside ml-4">
                     {exp.description.split("\n").map((point, idx) => (
                       <li key={idx}>{point}</li>
                     ))}

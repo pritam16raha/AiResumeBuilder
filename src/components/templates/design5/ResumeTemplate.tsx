@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function Professional1Template({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white text-gray-900 grid grid-cols-3 gap-6 border border-gray-300 shadow-md rounded-xl">
@@ -38,9 +47,15 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
               Education
             </h2>
             {resume.education.map((edu, i) => (
-              <p key={i} className="text-sm">
-                {edu.degree}, {edu.institution} ({edu.year})
-              </p>
+              <div key={i} className="text-sm mb-3">
+                <p>
+                  {edu.degree}, {edu.institution} ({edu.year})
+                </p>
+                <p>
+                  📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+                </p>
+                {edu.marks && <p>📊 Marks: {edu.marks}</p>}
+              </div>
             ))}
           </div>
         )}
@@ -139,6 +154,9 @@ export default function Professional1Template({ resume }: { resume: Resume }) {
               <div key={i} className="mb-4">
                 <p className="font-semibold">
                   {exp.role} @ {exp.company} ({exp.year})
+                </p>
+                <p className="text-sm text-gray-700 mb-1">
+                  📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
                 </p>
                 <p className="text-sm mt-1 whitespace-pre-line">
                   {exp.description}

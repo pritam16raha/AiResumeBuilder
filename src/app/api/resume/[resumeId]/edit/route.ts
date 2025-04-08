@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/verifyToken";
 import { z } from "zod";
 
-
 // ✨ Zod schema to validate incoming data
 const editResumeSchema = z.object({
   fullName: z.string(),
@@ -19,8 +18,11 @@ const editResumeSchema = z.object({
     .array(
       z.object({
         degree: z.string(),
-        institution: z.string().optional(),
+        institution: z.string(),
         year: z.string(),
+        marks: z.string(),
+        startDate: z.string(),
+        endDate: z.string(),
       })
     )
     .optional(),
@@ -51,6 +53,8 @@ const editResumeSchema = z.object({
         company: z.string(),
         role: z.string(),
         year: z.string(),
+        startDate: z.string(),
+        endDate: z.string(),
         description: z.string(),
       })
     )
@@ -116,6 +120,8 @@ export async function PUT(
             company: exp.company,
             role: exp.role,
             year: exp.year,
+            startDate: exp.startDate,
+            endDate: exp.endDate,
             description: exp.description, // ⬅️ single string update
           })
           .where(eq(experiences.id, exp.id));

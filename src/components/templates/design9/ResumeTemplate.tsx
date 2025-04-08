@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function TemplateFive({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-5xl mx-auto my-10 bg-white shadow-md rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-3">
@@ -42,6 +51,14 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
                   <span className="text-xs">
                     {edu.institution} | {edu.year}
                   </span>
+                  {edu.marks && (
+                    <p className="text-xs">📊 Marks: {edu.marks}</p>
+                  )}
+                  {(edu.startDate || edu.endDate) && (
+                    <p className="text-xs">
+                      📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+                    </p>
+                  )}
                 </li>
               ))}
             </ul>
@@ -100,6 +117,11 @@ export default function TemplateFive({ resume }: { resume: Resume }) {
                 <p className="font-medium text-gray-800">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
+                {(exp.startDate || exp.endDate) && (
+                  <p className="text-xs text-gray-600">
+                    📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
+                  </p>
+                )}
                 {exp.description && (
                   <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
                     {exp.description.split("\n").map((point, idx) => (

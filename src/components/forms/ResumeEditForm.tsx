@@ -194,6 +194,39 @@ export default function ResumeEditForm({ resumeId }: Props) {
                   updateField("education", updated);
                 }}
               />
+              <input
+                className="input-field mb-2"
+                type="text"
+                placeholder="Marks"
+                value={edu.marks}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].marks = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
+              <input
+                className="input-field mb-2"
+                type="date"
+                placeholder="Start Date"
+                value={edu.startDate}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].startDate = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
+              <input
+                className="input-field mb-2"
+                type="date"
+                placeholder="End Date"
+                value={edu.endDate}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].endDate = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
             </div>
           ))}
         </div>
@@ -299,6 +332,28 @@ export default function ResumeEditForm({ resumeId }: Props) {
               onChange={(e) => {
                 const updated = [...formData.experiences];
                 updated[i].year = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="input-field"
+              type="date"
+              placeholder="Start Date"
+              value={exp.startDate}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].startDate = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="input-field"
+              type="date"
+              placeholder="End Date"
+              value={exp.endDate}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].endDate = e.target.value;
                 updateField("experiences", updated);
               }}
             />

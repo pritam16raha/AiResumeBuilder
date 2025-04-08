@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function ModernSidebarResume({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-5xl mx-auto grid grid-cols-4 gap-6 p-8 bg-white shadow-lg border rounded-lg">
@@ -79,6 +88,14 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
                     <strong>{edu.degree}</strong> — {edu.institution} (
                     {edu.year})
                   </p>
+                  <p className="text-sm text-gray-600">
+                    📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+                  </p>
+                  {edu.marks && (
+                    <p className="text-sm text-gray-600">
+                      📊 Marks: {edu.marks}
+                    </p>
+                  )}
                 </li>
               ))}
             </ul>
@@ -96,6 +113,9 @@ export default function ModernSidebarResume({ resume }: { resume: Resume }) {
                 <div key={idx}>
                   <p>
                     <strong>{exp.role}</strong> @ {exp.company} ({exp.year})
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
                   </p>
                   {exp.description && (
                     <ul className="list-disc list-inside ml-4 text-sm text-gray-600">

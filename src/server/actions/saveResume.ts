@@ -14,11 +14,16 @@ type ResumePayload = {
     degree: string;
     institution?: string;
     year: string;
+    marks: string;
+    startDate?: string;
+    endDate?: string;
   }[];
   experience?: {
     company: string;
     role: string;
     year: string;
+    startDate?: string;
+    endDate?: string;
     description?: string;
   }[];
   projects?: {
@@ -39,7 +44,7 @@ type ResumePayload = {
 };
 
 export async function saveResume(data: ResumePayload) {
-  // Step 1: Save resume
+  // Step 1: Insert into resumes table
   const resumeResult = await db
     .insert(resumes)
     .values({
@@ -49,7 +54,15 @@ export async function saveResume(data: ResumePayload) {
       phone: data.phone,
       summary: data.summary || "",
       skills: data.skills || [],
-      education: data.education || [],
+      education:
+        data.education?.map((edu) => ({
+          degree: edu.degree,
+          institution: edu.institution || "",
+          year: edu.year,
+          marks: edu.marks || "",
+          startDate: edu.startDate || "",
+          endDate: edu.endDate || "",
+        })) || [],
       certifications: data.certifications || [],
       languages: data.languages || [],
       awards: data.awards || [],
@@ -71,21 +84,18 @@ export async function saveResume(data: ResumePayload) {
     }
   }
 
-  // Step 3: Save experiences
-  // Step 3: Save experiences
   if (data.experience && data.experience.length > 0) {
     for (const exp of data.experience) {
-      await db
-        .insert(experiences)
-        .values({
-          userId: data.userId,
-          resumeId: resumeId,
-          company: exp.company,
-          role: exp.role,
-          year: exp.year,
-          description: exp.description || "", // Make sure to include `description`
-        })
-        .execute();
+      await db.insert(experiences).values({
+        userId: data.userId,
+        resumeId,
+        company: exp.company,
+        role: exp.role,
+        year: exp.year,
+        startDate: exp.startDate || "",
+        endDate: exp.endDate || "",
+        description: exp.description || "",
+      });
     }
   }
 }

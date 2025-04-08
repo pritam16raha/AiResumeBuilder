@@ -17,6 +17,16 @@ export default function MultiStepForm() {
     experience: [],
     skills: [],
     summary: "",
+    role: "",
+    stack: "",
+    experienceSummary: "",
+    prompt: "",
+    projects: [],
+    certifications: [],
+    languages: [],
+    awards: [],
+    hobbies: [],
+    references: [],
   });
 
   useEffect(() => {

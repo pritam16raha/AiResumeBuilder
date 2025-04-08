@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function TemplateThree({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-6xl mx-auto p-8 bg-white border rounded shadow-md text-gray-800">
@@ -42,10 +51,18 @@ export default function TemplateThree({ resume }: { resume: Resume }) {
       {resume.education?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xl font-semibold border-b mb-2">🎓 Education</h2>
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             {resume.education.map((edu, i) => (
               <li key={i}>
-                <strong>{edu.degree}</strong>, {edu.institution} ({edu.year})
+                <p>
+                  <strong>{edu.degree}</strong>, {edu.institution} ({edu.year})
+                </p>
+                <p className="text-sm text-gray-600">
+                  📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+                </p>
+                {edu.marks && (
+                  <p className="text-sm text-gray-600">📊 Marks: {edu.marks}</p>
+                )}
               </li>
             ))}
           </ul>
@@ -56,14 +73,17 @@ export default function TemplateThree({ resume }: { resume: Resume }) {
       {resume.experiences?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xl font-semibold border-b mb-2">💼 Experience</h2>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {resume.experiences.map((exp, i) => (
               <div key={i}>
                 <p className="font-semibold">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
+                <p className="text-sm text-gray-600">
+                  📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
+                </p>
                 {exp.description && (
-                  <ul className="list-disc list-inside text-sm ml-4">
+                  <ul className="list-disc list-inside text-sm ml-4 mt-1">
                     {exp.description.split("\n").map((line, idx) => (
                       <li key={idx}>{line}</li>
                     ))}

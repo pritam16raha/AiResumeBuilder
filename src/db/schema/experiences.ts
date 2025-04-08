@@ -16,6 +16,8 @@ export const experiences = pgTable("experiences", {
   company: text("company").notNull(),
   role: text("role").notNull(),
   year: text("year").notNull(),
+  startDate: text("start_date").notNull(), // NEW
+  endDate: text("end_date").notNull(), // NEW
   description: text("description").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });

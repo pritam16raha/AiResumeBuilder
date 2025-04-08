@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+};
+
 export default function TemplateSix({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-3xl mx-auto my-10 bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
@@ -55,6 +64,16 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
             {resume.education.map((edu, i) => (
               <li key={i}>
                 <strong>{edu.degree}</strong> — {edu.institution} ({edu.year})
+                {edu.marks && (
+                  <div className="text-xs text-gray-600">
+                    📊 Marks: {edu.marks}
+                  </div>
+                )}
+                {(edu.startDate || edu.endDate) && (
+                  <div className="text-xs text-gray-600">
+                    📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -72,6 +91,11 @@ export default function TemplateSix({ resume }: { resume: Resume }) {
               <p className="font-medium text-gray-800">
                 {exp.role} @ {exp.company} ({exp.year})
               </p>
+              {(exp.startDate || exp.endDate) && (
+                <p className="text-xs text-gray-600">
+                  📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
+                </p>
+              )}
               {exp.description && (
                 <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
                   {exp.description.split("\n").map((point, idx) => (

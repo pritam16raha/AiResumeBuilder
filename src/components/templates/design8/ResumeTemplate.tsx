@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function TemplateFour({ resume }: { resume: Resume }) {
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg border border-gray-200">
@@ -50,6 +59,12 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
               <p>
                 {edu.institution} — {edu.year}
               </p>
+              {edu.marks && <p>📊 Marks: {edu.marks}</p>}
+              {(edu.startDate || edu.endDate) && (
+                <p>
+                  📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+                </p>
+              )}
             </div>
           ))}
         </section>
@@ -66,6 +81,11 @@ export default function TemplateFour({ resume }: { resume: Resume }) {
               <p className="text-sm font-medium text-gray-800">
                 {exp.role} @ {exp.company} ({exp.year})
               </p>
+              {(exp.startDate || exp.endDate) && (
+                <p className="text-sm text-gray-600">
+                  📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
+                </p>
+              )}
               {exp.description && (
                 <ul className="list-disc list-inside text-sm text-gray-700 ml-2">
                   {exp.description.split("\n").map((line, idx) => (
