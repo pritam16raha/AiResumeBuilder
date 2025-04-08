@@ -1,7 +1,7 @@
 "use client";
 
 import { useResumeForm } from "@/context/ResumeFormContext";
-import { ResumeFormData } from "@/types/resume";
+import { ExperienceItem, ResumeFormData } from "@/types/resume";
 import axios from "axios";
 import { useState } from "react";
 
@@ -15,14 +15,6 @@ const stringArrayFields: (keyof ResumeFormData)[] = [
 
 type Props = {
   prev: () => void;
-};
-
-type ExperienceItem = {
-  company: string;
-  role: string;
-  year: string;
-  customPrompt?: string;
-  description: string;
 };
 
 export default function StepThree({ prev }: Props) {
@@ -60,25 +52,47 @@ export default function StepThree({ prev }: Props) {
     const updated = [...experiences];
     updated[index][field] = value;
     setExperiences(updated);
+    updateData({ experience: updated });
   };
 
+  // const addExperience = () => {
+  //   setExperiences((prev) => [
+  //     ...prev,
+  //     {
+  //       company: "",
+  //       role: "",
+  //       year: "",
+  //       customPrompt: "",
+  //       description: "",
+  //     },
+  //   ]);
+  // };
   const addExperience = () => {
-    setExperiences((prev) => [
-      ...prev,
+    const updated = [
+      ...experiences,
       {
         company: "",
         role: "",
         year: "",
+        month: "",
         customPrompt: "",
         description: "",
       },
-    ]);
+    ];
+    setExperiences(updated);
+    updateData({ experience: updated });
   };
 
+  // const deleteExperience = (index: number) => {
+  //   const updated = [...experiences];
+  //   updated.splice(index, 1);
+  //   setExperiences(updated);
+  // };
   const deleteExperience = (index: number) => {
     const updated = [...experiences];
     updated.splice(index, 1);
     setExperiences(updated);
+    updateData({ experience: updated });
   };
 
   const generateDescription = async (index: number) => {
@@ -99,6 +113,7 @@ export default function StepThree({ prev }: Props) {
       const updated = [...experiences];
       updated[index].description = res.data.description;
       setExperiences(updated);
+      updateData({ experience: updated });
     } catch (err) {
       alert("❌ Failed to generate description.");
       console.error(err);
@@ -136,7 +151,9 @@ export default function StepThree({ prev }: Props) {
   };
 
   const addCustomItem = (field: keyof ResumeFormData) => {
-    updateData({ [field]: [...(data[field] || []), ""] });
+    // updateData({ [field]: [...(data[field] || []), ""] });
+    const updated = [...(data[field] || []), ""];
+    updateData({ [field]: updated });
   };
 
   const removeCustomItem = (field: keyof ResumeFormData, index: number) => {

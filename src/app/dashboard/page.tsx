@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { Button } from "@/components/ui/button";
 
 type Resume = {
   id: string;
@@ -93,21 +94,21 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-400 mt-2">
                       Created at: {new Date(resume.createdAt).toLocaleString()}
                     </p>
-
+                  </div>
+                  <Button>
                     <Link
                       href={`/dashboard/resume/${resume.id}/edit`}
-                      className="inline-block text-sm text-white bg-indigo-600 px-3 py-1 mt-2 rounded hover:bg-indigo-700"
+                      className="inline-block text-sm text-white"
                     >
                       ✏️ Edit
                     </Link>
-                  </div>
-
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => handleDelete(resume.id)}
-                    className="text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                    className="text-sm bg-red-600 text-white "
                   >
-                    🗑️ Delete
-                  </button>
+                    Delete Resume
+                  </Button>
                 </div>
               </li>
             ))}
