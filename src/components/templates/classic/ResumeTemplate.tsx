@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function ClassicTemplate({ resume }: { resume: Resume }) {
   return (
     <div className="w-[794px] h-[1123px] mx-auto p-6 bg-white shadow-md border border-gray-200 ">
@@ -62,31 +71,40 @@ export default function ClassicTemplate({ resume }: { resume: Resume }) {
       )}
 
       {/* Education */}
-      {resume.education && resume.education.length > 0 && (
+      {resume.education?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xl font-semibold text-gray-700 border-b pb-1 mb-2">
             Education
           </h2>
           {resume.education.map((edu, i) => (
-            <p key={i} className="text-gray-800">
-              - {edu.degree}, {edu.institution} ({edu.year})
-            </p>
+            <div key={i} className="text-gray-800 mb-2">
+              <p className="font-medium">
+                🎓 {edu.degree}, {edu.institution} ({edu.year})
+              </p>
+              <p className="text-sm">
+                📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+              </p>
+              {edu.marks && <p className="text-sm">📊 Marks: {edu.marks}</p>}
+            </div>
           ))}
         </section>
       )}
 
       {/* Experience */}
-      {resume.experiences && resume.experiences.length > 0 && (
+      {resume.experiences?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xl font-semibold text-gray-700 border-b pb-1 mb-2">
             Experience
           </h2>
           {resume.experiences.map((exp, i) => (
-            <div key={i} className="mb-4">
-              <p className="font-medium text-gray-800">
-                {exp.role} @ {exp.company} ({exp.year})
+            <div key={i} className="mb-4 text-gray-800">
+              <p className="font-medium">
+                🏢 {exp.role} @ {exp.company} ({exp.year})
               </p>
-              <p className="ml-4 text-gray-700">{exp.description}</p>
+              <p className="text-sm">
+                📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
+              </p>
+              <p className="ml-4">{exp.description}</p>
             </div>
           ))}
         </section>

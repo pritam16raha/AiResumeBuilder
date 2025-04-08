@@ -185,61 +185,73 @@ export default function ResumeEditForm({ resumeId }: Props) {
         <h2 className="section-heading">🎓 Education</h2>
         <div className="grid grid-cols-1 gap-4">
           {formData.education.map((edu, i) => (
-            <div
-              key={i}
-              className="bg-white p-4 rounded shadow-sm border space-y-3"
-            >
-              {/* Subfields in 50% width on desktop */}
-              <div className="flex flex-col md:flex-row md:gap-4">
-                <input
-                  className="input-field md:w-1/2 mb-2 md:mb-0 border-2 p-2 rounded-md"
-                  type="text"
-                  placeholder="Degree"
-                  value={edu.degree}
-                  onChange={(e) => {
-                    const updated = [...formData.education];
-                    updated[i].degree = e.target.value;
-                    updateField("education", updated);
-                  }}
-                />
-                <input
-                  className="input-field md:w-1/2 border-2 p-2 rounded-md"
-                  type="text"
-                  placeholder="Year"
-                  value={edu.year}
-                  onChange={(e) => {
-                    const updated = [...formData.education];
-                    updated[i].year = e.target.value;
-                    updateField("education", updated);
-                  }}
-                />
-              </div>
-
-              {/* Main field full width always */}
-              <div className="flex flex-col md:flex-row md:gap-4">
-                <input
-                  className="input-field w-full border-2 p-2 rounded-md"
-                  type="text"
-                  placeholder="Institution"
-                  value={edu.institution}
-                  onChange={(e) => {
-                    const updated = [...formData.education];
-                    updated[i].institution = e.target.value;
-                    updateField("education", updated);
-                  }}
-                />
-                {/* <input
-                  className="input-field md:w-1/2 border-2 p-2 rounded-md"
-                  type="text"
-                  placeholder="Eg. 9.0 CGPA / 89 %"
-                  value={edu.marks}
-                  onChange={(e) => {
-                    const updated = [...formData.education];
-                    updated[i].marks = e.target.value;
-                    updateField("education", updated);
-                  }}
-                /> */}
-              </div>
+            <div key={i} className="bg-white p-3 rounded shadow-sm border">
+              <input
+                className="input-field mb-2"
+                type="text"
+                placeholder="Degree"
+                value={edu.degree}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].degree = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
+              <input
+                className="input-field mb-2"
+                type="text"
+                placeholder="Institution"
+                value={edu.institution}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].institution = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
+              <input
+                className="input-field"
+                type="text"
+                placeholder="Year"
+                value={edu.year}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].year = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
+              <input
+                className="input-field mb-2"
+                type="text"
+                placeholder="Marks"
+                value={edu.marks}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].marks = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
+              <input
+                className="input-field mb-2"
+                type="date"
+                placeholder="Start Date"
+                value={edu.startDate}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].startDate = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
+              <input
+                className="input-field mb-2"
+                type="date"
+                placeholder="End Date"
+                value={edu.endDate}
+                onChange={(e) => {
+                  const updated = [...formData.education];
+                  updated[i].endDate = e.target.value;
+                  updateField("education", updated);
+                }}
+              />
             </div>
           ))}
         </div>
@@ -327,68 +339,71 @@ export default function ResumeEditForm({ resumeId }: Props) {
             key={exp.id}
             className="bg-white p-4 rounded-md shadow-sm border mb-4 space-y-3"
           >
-            {/* Row: Company & Role */}
-            <div className="flex flex-col md:flex-row md:gap-4">
-              <input
-                className="border p-2 rounded-md w-full md:w-1/2"
-                placeholder="Company"
-                value={exp.company}
-                onChange={(e) => {
-                  const updated = [...formData.experiences];
-                  updated[i].company = e.target.value;
-                  updateField("experiences", updated);
-                }}
-              />
-              <input
-                className="border p-2 rounded-md w-full md:w-1/2 mt-2 md:mt-0"
-                placeholder="Role"
-                value={exp.role}
-                onChange={(e) => {
-                  const updated = [...formData.experiences];
-                  updated[i].role = e.target.value;
-                  updateField("experiences", updated);
-                }}
-              />
-            </div>
+            <input
+              className="input-field"
+              placeholder="Company"
+              value={exp.company}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].company = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="input-field"
+              placeholder="Role"
+              value={exp.role}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].role = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="input-field"
+              placeholder="Year"
+              value={exp.year}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].year = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="input-field"
+              type="date"
+              placeholder="Start Date"
+              value={exp.startDate}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].startDate = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
+            <input
+              className="input-field"
+              type="date"
+              placeholder="End Date"
+              value={exp.endDate}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].endDate = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
 
-            {/* Row: Year */}
-            <div className="flex flex-col md:flex-row md:gap-4">
-              <input
-                className="border p-2 rounded-md w-full md:w-[100%]"
-                placeholder="Year"
-                value={exp.year}
-                onChange={(e) => {
-                  const updated = [...formData.experiences];
-                  updated[i].year = e.target.value;
-                  updateField("experiences", updated);
-                }}
-              />
-              {/* <input
-                className="border p-2 rounded-md w-full md:w-[100%]"
-                placeholder="Duration in month"
-                value={exp.month}
-                onChange={(e) => {
-                  const updated = [...formData.experiences];
-                  updated[i].month = e.target.value;
-                  updateField("experiences", updated);
-                }}
-              /> */}
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="font-semibold block mb-1">Description</label>
-              <textarea
-                className="border p-2 rounded-md w-full min-h-[10rem]"
-                placeholder="Describe your experience"
-                value={exp.description}
-                onChange={(e) => {
-                  const updated = [...formData.experiences];
-                  updated[i].description = e.target.value;
-                  updateField("experiences", updated);
-                }}
-              />
-            </div>
+            {/* ✅ Single Description now */}
+            <label className="font-semibold block">Description</label>
+            <textarea
+              className="input-textarea"
+              placeholder="Describe your experience"
+              value={exp.description}
+              onChange={(e) => {
+                const updated = [...formData.experiences];
+                updated[i].description = e.target.value;
+                updateField("experiences", updated);
+              }}
+            />
           </div>
         ))}
       </div>

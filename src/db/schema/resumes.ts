@@ -22,7 +22,14 @@ export const resumes = pgTable("resumes", {
 
   education:
     jsonb("education").$type<
-      { degree: string; institution?: string; year: string }[]
+      {
+        degree: string;
+        institution: string;
+        year: string;
+        marks: string;
+        startDate: string;
+        endDate: string;
+      }[]
     >(),
 
   createdAt: timestamp("created_at").defaultNow(),

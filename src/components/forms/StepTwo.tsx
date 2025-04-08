@@ -40,7 +40,16 @@ export default function StepTwo({ next, prev }: Props) {
   const educationList = useMemo(() => {
     return data.education?.length
       ? data.education
-      : [{ degree: "", institution: "", year: "" }];
+      : [
+          {
+            degree: "",
+            institution: "",
+            year: "",
+            marks: "",
+            startDate: "",
+            endDate: "",
+          },
+        ];
   }, [data.education]);
 
   const handleEduChange = (
@@ -55,7 +64,17 @@ export default function StepTwo({ next, prev }: Props) {
 
   const addEducation = () => {
     updateData({
-      education: [...educationList, { degree: "", institution: "", year: "" }],
+      education: [
+        ...educationList,
+        {
+          degree: "",
+          institution: "",
+          year: "",
+          marks: "",
+          startDate: "",
+          endDate: "",
+        },
+      ],
     });
   };
 
@@ -256,6 +275,43 @@ export default function StepTwo({ next, prev }: Props) {
               onChange={(e) => handleEduChange(index, "year", e.target.value)}
               className="border px-4 py-2 rounded-md"
               required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-600">Marks</label>
+            <input
+              value={edu.marks}
+              onChange={(e) => handleEduChange(index, "marks", e.target.value)}
+              className="border px-4 py-2 rounded-md"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-600">
+              Start Date
+            </label>
+            <input
+              type="date"
+              value={edu.startDate}
+              onChange={(e) =>
+                handleEduChange(index, "startDate", e.target.value)
+              }
+              className="border px-4 py-2 rounded-md"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-600">
+              End Date
+            </label>
+            <input
+              type="date"
+              value={edu.endDate}
+              onChange={(e) =>
+                handleEduChange(index, "endDate", e.target.value)
+              }
+              className="border px-4 py-2 rounded-md"
             />
           </div>
         </div>

@@ -52,6 +52,14 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
                 <p className="text-gray-600">
                   {edu.institution} • {edu.year}
                 </p>
+                {edu.marks && (
+                  <p className="text-xs text-gray-600">📊 Marks: {edu.marks}</p>
+                )}
+                {(edu.startDate || edu.endDate) && (
+                  <p className="text-xs text-gray-500">
+                    📅 {edu.startDate} – {edu.endDate}
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -70,7 +78,14 @@ export default function ModernTemplate({ resume }: { resume: Resume }) {
                 <p className="font-semibold">
                   {exp.role} @ {exp.company} ({exp.year})
                 </p>
-                <p className="ml-4 text-sm text-gray-700">{exp.description}</p>
+                {(exp.startDate || exp.endDate) && (
+                  <p className="text-xs text-gray-500 mb-1">
+                    📅 {exp.startDate} – {exp.endDate}
+                  </p>
+                )}
+                <p className="ml-4 text-sm text-gray-700 whitespace-pre-line">
+                  {exp.description}
+                </p>
               </div>
             ))}
           </div>

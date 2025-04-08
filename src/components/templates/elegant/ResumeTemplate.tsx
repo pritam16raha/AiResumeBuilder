@@ -2,6 +2,15 @@
 
 import { Resume } from "@/types/resume";
 
+const formatDate = (date?: string) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+};
+
 export default function ElegantTemplate({ resume }: { resume: Resume }) {
   return (
     <div className="w-[794px] h-[1123px] mx-auto bg-white shadow-lg rounded-md px-8 py-10 text-gray-800 space-y-8">
@@ -50,6 +59,14 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
               <p className="text-gray-600">
                 {edu.institution} • {edu.year}
               </p>
+              {edu.marks && (
+                <p className="text-xs text-gray-500">📊 Marks: {edu.marks}</p>
+              )}
+              {(edu.startDate || edu.endDate) && (
+                <p className="text-xs text-gray-500">
+                  📅 {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -66,7 +83,12 @@ export default function ElegantTemplate({ resume }: { resume: Resume }) {
               <p className="font-semibold">
                 {exp.role} @ {exp.company}
               </p>
-              <p className="text-gray-600 mb-1">{exp.year}</p>
+              <p className="text-gray-600">{exp.year}</p>
+              {(exp.startDate || exp.endDate) && (
+                <p className="text-xs text-gray-500">
+                  📅 {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
+                </p>
+              )}
               {exp.description && (
                 <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
                   {exp.description.split("\n").map((point, idx) => (

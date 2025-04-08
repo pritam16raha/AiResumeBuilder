@@ -28,6 +28,8 @@ export default function StepThree({ prev }: Props) {
             company: "",
             role: "",
             year: "",
+            startDate: "",
+            endDate: "",
             customPrompt: "",
             description: "",
           },
@@ -55,18 +57,6 @@ export default function StepThree({ prev }: Props) {
     updateData({ experience: updated });
   };
 
-  // const addExperience = () => {
-  //   setExperiences((prev) => [
-  //     ...prev,
-  //     {
-  //       company: "",
-  //       role: "",
-  //       year: "",
-  //       customPrompt: "",
-  //       description: "",
-  //     },
-  //   ]);
-  // };
   const addExperience = () => {
     const updated = [
       ...experiences,
@@ -74,7 +64,8 @@ export default function StepThree({ prev }: Props) {
         company: "",
         role: "",
         year: "",
-        month: "",
+        startDate: "",
+        endDate: "",
         customPrompt: "",
         description: "",
       },
@@ -219,6 +210,32 @@ export default function StepThree({ prev }: Props) {
                 onChange={(e) => handleChange(index, "role", e.target.value)}
                 className="border px-4 py-2 rounded-md"
                 required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">
+                Start Date
+              </label>
+              <input
+                type="date"
+                value={exp.startDate}
+                onChange={(e) =>
+                  handleChange(index, "startDate", e.target.value)
+                }
+                className="border px-4 py-2 rounded-md"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">
+                End Date
+              </label>
+              <input
+                type="date"
+                value={exp.endDate}
+                onChange={(e) => handleChange(index, "endDate", e.target.value)}
+                className="border px-4 py-2 rounded-md"
               />
             </div>
 

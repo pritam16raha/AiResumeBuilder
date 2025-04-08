@@ -7,14 +7,19 @@ export type EducationItem = {
   degree: string;
   institution: string;
   year: string;
+  marks: string;
+  startDate: string;
+  endDate: string;
 };
 
 export type ExperienceItem = {
   company: string;
   role: string;
   year: string;
-  description: string; // Single string description
+  startDate: string;
+  endDate: string;
   customPrompt?: string;
+  description: string;
 };
 
 export type ExperienceItemForEditForm = {
@@ -36,6 +41,9 @@ export type ResumeEditData = {
     degree: string;
     institution: string;
     year: string;
+    marks: string;
+    startDate: string;
+    endDate: string;
   }[];
   certifications: string[];
   languages: string[];
@@ -56,6 +64,8 @@ export type ResumeEditData = {
     company: string;
     role: string;
     year: string;
+    startDate: string;
+    endDate: string;
     description: string;
   }[];
 };
@@ -136,6 +146,9 @@ export type Resume = {
     degree: string;
     institution: string;
     year: string;
+    marks: string;
+    startDate: string;
+    endDate: string;
   }[];
   role?: string | null;
   stack?: string | null;
