@@ -5,7 +5,7 @@ import { Github, Mail, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-8 mt-16">
+    <footer className="bg-gray-900 text-gray-300 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Logo & Info */}
