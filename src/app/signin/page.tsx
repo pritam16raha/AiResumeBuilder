@@ -13,9 +13,11 @@ import Link from "next/link";
 export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loginError, setLoginError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setLoginError("");
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -29,7 +31,13 @@ export default function LoginPage() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
       router.push("/resume/builder");
     } catch (error) {
-      console.error("Login Failed:", error);
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message || "Invalid email or password.";
+        setLoginError(message);
+      } else {
+        setLoginError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -42,6 +50,11 @@ export default function LoginPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {loginError && (
+            <div className="mb-4 text-sm text-red-400 text-center bg-red-900/40 border border-red-500 rounded p-2">
+              {loginError}
+            </div>
+          )}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

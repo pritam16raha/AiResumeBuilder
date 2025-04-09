@@ -15,9 +15,11 @@ export default function RegisterPage() {
   });
 
   const router = useRouter();
+  const [registerError, setRegisterError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setRegisterError("");
   };
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -33,7 +35,13 @@ export default function RegisterPage() {
 
       router.push("/resume/builder");
     } catch (error) {
-      console.error("Registration failed:", error);
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message || "Registration failed. Try again.";
+        setRegisterError(message);
+      } else {
+        setRegisterError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -43,6 +51,11 @@ export default function RegisterPage() {
         <h1 className="text-2xl font-semibold text-center text-white mb-6">
           👤 Create Your Account
         </h1>
+        {registerError && (
+          <div className="mb-4 text-sm text-red-400 text-center bg-red-900/40 border border-red-500 rounded p-2">
+            {registerError}
+          </div>
+        )}
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
             <Label htmlFor="name" className="text-white mb-2">
