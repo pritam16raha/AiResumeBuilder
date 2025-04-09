@@ -251,6 +251,7 @@ export default function StepTwo({ next, prev }: Props) {
               onChange={(e) => handleEduChange(index, "degree", e.target.value)}
               className="border px-4 py-2 rounded-md"
               required
+              placeholder="MCA"
             />
           </div>
 
@@ -265,6 +266,7 @@ export default function StepTwo({ next, prev }: Props) {
               }
               className="border px-4 py-2 rounded-md"
               required
+              placeholder="Dr B C Roy Engineering College"
             />
           </div>
 
@@ -275,6 +277,7 @@ export default function StepTwo({ next, prev }: Props) {
               onChange={(e) => handleEduChange(index, "year", e.target.value)}
               className="border px-4 py-2 rounded-md"
               required
+              placeholder="2024"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -284,6 +287,7 @@ export default function StepTwo({ next, prev }: Props) {
               onChange={(e) => handleEduChange(index, "marks", e.target.value)}
               className="border px-4 py-2 rounded-md"
               required
+              placeholder="7.8 CGPA"
             />
           </div>
 
@@ -386,6 +390,7 @@ export default function StepTwo({ next, prev }: Props) {
               }
               className="border px-4 py-2 rounded-md"
               required
+              placeholder="Ai Resume Builder"
             />
           </div>
 
@@ -394,12 +399,13 @@ export default function StepTwo({ next, prev }: Props) {
               Tech Used
             </label>
             <input
-              value={project.techStack}
+              value={project.techStack.join(", ")} // 👈 Convert array to comma+space string
               onChange={(e) =>
                 handleProjectChange(index, "techStack", e.target.value)
               }
               className="border px-4 py-2 rounded-md"
               required
+              placeholder="React, NextJS, Docker, etc"
             />
           </div>
 
@@ -430,6 +436,7 @@ export default function StepTwo({ next, prev }: Props) {
               className="border px-4 py-2 rounded-md"
               rows={3}
               required
+              placeholder="Gemini will do this for you"
             />
             <button
               type="button"

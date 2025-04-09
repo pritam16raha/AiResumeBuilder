@@ -17,28 +17,35 @@ export default function DashboardPage() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchResumes = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("/api/my-resumes", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("data", res);
+useEffect(() => {
+  const fetchResumes = async () => {
+    const token = localStorage.getItem("token");
 
-        setResumes(res.data.resumes);
-      } catch (err) {
-        console.error("Failed to fetch resumes:", err);
-        toast.error("❌ Unable to fetch resumes.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!token) {
+      console.warn("No token found. Redirecting or skipping fetch.");
+      setLoading(false);
+      return;
+    }
 
-    fetchResumes();
-  }, []);
+    try {
+      const res = await axios.get("/api/my-resumes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setResumes(res.data.resumes);
+    } catch (err) {
+      console.error("Failed to fetch resumes:", err);
+      toast.error("❌ Unauthorized or session expired.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchResumes();
+}, []);
+
 
   const handleDelete = async (resumeId: string) => {
     const confirmDelete = confirm(
@@ -74,7 +81,14 @@ export default function DashboardPage() {
         {loading ? (
           <p>Loading...</p>
         ) : resumes.length === 0 ? (
-          <p className="text-gray-500">No resumes found.</p>
+          <div className="text-center text-gray-500">
+            <p className="mb-4">You haven&apos;t created any resume yet.</p>
+            <Link href="/resume/builder">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                ➕ Create Resume
+              </Button>
+            </Link>
+          </div>
         ) : (
           <ul className="space-y-4">
             {resumes.map((resume) => (

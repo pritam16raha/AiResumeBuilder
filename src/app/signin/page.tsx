@@ -9,11 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import Spinner from "@/components/ui/Spinner";
 
 export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loginError, setLoginError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,6 +24,7 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await axios.post("/api/user", {
         type: "login",
@@ -29,6 +32,7 @@ export default function LoginPage() {
       });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      window.dispatchEvent(new Event("storage"));
       router.push("/resume/builder");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -38,6 +42,8 @@ export default function LoginPage() {
       } else {
         setLoginError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsLoading(false); // ✅ stop loader
     }
   };
 
@@ -57,7 +63,9 @@ export default function LoginPage() {
           )}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-white">
+                Email
+              </Label>
               <Input
                 type="email"
                 name="email"
@@ -69,7 +77,9 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-white">
+                Password
+              </Label>
               <Input
                 type="password"
                 name="password"
@@ -80,8 +90,19 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full mt-4">
-              Sign In
+            <Button
+              type="submit"
+              className="w-full mt-4 flex items-center justify-center gap-2"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-gray-100">

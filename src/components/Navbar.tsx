@@ -1,13 +1,33 @@
-// components/Navbar.tsx
-
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // ✅ Check login status on load and listen to changes
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+
+    checkAuth();
+
+    window.addEventListener("storage", checkAuth);
+    return () => window.removeEventListener("storage", checkAuth);
+  }, []);
+
+  // ✅ Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    window.dispatchEvent(new Event("storage"));
+  };
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -31,21 +51,39 @@ export default function Navbar() {
           <Link href="/contact" className="hover:text-blue-600 transition">
             Contact
           </Link>
-          <Link href="/dashboard" className="hover:text-blue-600 transition">
-            Dashboard
-          </Link>
-          <Link href="/resume/builder" className="hover:text-blue-600 transition">
-            Build Resume
-          </Link>
-          <Link
-            href="/signin"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Sign In
-          </Link>
-          <Link href="/logout" className="text-red-400">
-            🚪 Logout
-          </Link>
+
+          {isLoggedIn && (
+            <>
+              <Link
+                href="/dashboard"
+                className="hover:text-blue-600 transition"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/resume/builder"
+                className="hover:text-blue-600 transition"
+              >
+                Build Resume
+              </Link>
+            </>
+          )}
+
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="text-red-500 hover:underline"
+            >
+              🚪 Logout
+            </button>
+          ) : (
+            <Link
+              href="/signin"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -63,21 +101,42 @@ export default function Navbar() {
           <Link href="/features" className="block hover:text-blue-600">
             Features
           </Link>
-          <Link href="/templates" className="block hover:text-blue-600">
-            Templates
+          <Link href="/contact" className="block hover:text-blue-600">
+            Contact
           </Link>
-          <Link href="/dashboard" className="block hover:text-blue-600">
-            Dashboard
-          </Link>
-          <Link
-            href="/signin"
-            className="block text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Sign In
-          </Link>
-          <Link href="/logout" className="text-red-400 hover:underline">
-            🚪 Logout
-          </Link>
+
+          {isLoggedIn && (
+            <>
+              <Link href="/dashboard" className="block hover:text-blue-600">
+                Dashboard
+              </Link>
+              <Link
+                href="/resume/builder"
+                className="block hover:text-blue-600"
+              >
+                Build Resume
+              </Link>
+            </>
+          )}
+
+          {isLoggedIn ? (
+            <button
+              onClick={() => {
+                handleLogout();
+                setMenuOpen(false);
+              }}
+              className="text-red-500 hover:underline block w-full text-left"
+            >
+              🚪 Logout
+            </button>
+          ) : (
+            <Link
+              href="/signin"
+              className="block text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       )}
     </nav>

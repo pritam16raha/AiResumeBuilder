@@ -3,6 +3,7 @@
 import { useResumeForm } from "@/context/ResumeFormContext";
 import { ExperienceItem, ResumeFormData } from "@/types/resume";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const stringArrayFields: (keyof ResumeFormData)[] = [
@@ -18,6 +19,8 @@ type Props = {
 };
 
 export default function StepThree({ prev }: Props) {
+  const router = useRouter();
+
   const { data, updateData, clearData } = useResumeForm();
 
   const [experiences, setExperiences] = useState<ExperienceItem[]>(
@@ -132,6 +135,8 @@ export default function StepThree({ prev }: Props) {
       if (res.data.success) {
         alert("🎉 Resume saved successfully!");
         clearData();
+        localStorage.removeItem("resumeData"); // ✅ optional extra clear if used
+        router.push("/dashboard"); // ✅ redirect to dashboard
       } else {
         alert("❌ Something went wrong!");
       }
@@ -200,6 +205,7 @@ export default function StepThree({ prev }: Props) {
                 onChange={(e) => handleChange(index, "company", e.target.value)}
                 className="border px-4 py-2 rounded-md"
                 required
+                placeholder="FAANG"
               />
             </div>
 
@@ -210,6 +216,7 @@ export default function StepThree({ prev }: Props) {
                 onChange={(e) => handleChange(index, "role", e.target.value)}
                 className="border px-4 py-2 rounded-md"
                 required
+                placeholder="Software Developer"
               />
             </div>
 
@@ -246,6 +253,7 @@ export default function StepThree({ prev }: Props) {
                 onChange={(e) => handleChange(index, "year", e.target.value)}
                 className="border px-4 py-2 rounded-md"
                 required
+                placeholder="2025"
               />
             </div>
 
@@ -275,6 +283,7 @@ export default function StepThree({ prev }: Props) {
                 className="border px-4 py-2 rounded-md"
                 rows={3}
                 required
+                placeholder="Gemini will do this for you"
               />
               <button
                 type="button"

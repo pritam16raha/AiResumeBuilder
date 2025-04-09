@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/Spinner";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -16,6 +17,7 @@ export default function RegisterPage() {
 
   const router = useRouter();
   const [registerError, setRegisterError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,6 +26,7 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await axios.post("/api/user", {
         type: "register",
@@ -32,7 +35,7 @@ export default function RegisterPage() {
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-
+      window.dispatchEvent(new Event("storage"));
       router.push("/resume/builder");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -42,6 +45,8 @@ export default function RegisterPage() {
       } else {
         setRegisterError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsLoading(false); // ✅ hide loader
     }
   };
 
@@ -97,8 +102,18 @@ export default function RegisterPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full mt-4">
-            🚀 Sign Up
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full mt-4 flex items-center justify-center gap-2"
+          >
+            {isLoading ? (
+              <>
+                <Spinner /> Creating account...
+              </>
+            ) : (
+              "🚀 Sign Up"
+            )}
           </Button>
         </form>
 

@@ -70,6 +70,7 @@ export default function StepOne({ next }: Props) {
           onChange={(e) => updateData({ fullName: e.target.value })}
           className="border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
+          placeholder="Pritam Raha"
         />
       </div>
 
@@ -83,6 +84,7 @@ export default function StepOne({ next }: Props) {
           onChange={(e) => updateData({ email: e.target.value })}
           className="border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
+          placeholder="rahapritam32@gmail.com"
         />
       </div>
 
@@ -96,6 +98,7 @@ export default function StepOne({ next }: Props) {
           onChange={(e) => updateData({ phone: e.target.value })}
           className="border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
+          placeholder="+91 9749215498"
         />
       </div>
 
@@ -169,6 +172,7 @@ export default function StepOne({ next }: Props) {
           onChange={(e) => updateData({ summary: e.target.value })}
           className="border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           rows={5}
+          placeholder="Gemini will do this for you"
         />
       </div>
 
@@ -179,7 +183,7 @@ export default function StepOne({ next }: Props) {
         disabled={loading}
         className="text-sm text-blue-600 hover:underline"
       >
-        ✨ {loading ? "Generating..." : "Regenerate Summary with AI"}
+        ✨ {loading ? "Generating..." : "Generate Summary with AI"}
       </button>
 
       {/* Next Button */}
