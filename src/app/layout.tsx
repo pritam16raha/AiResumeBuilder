@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "rahapritam32@gmail.com",
+  title: "Prisume AI",
   description: "Developed By Pritam Raha",
 };
 
