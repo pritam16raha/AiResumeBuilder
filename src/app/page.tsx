@@ -79,7 +79,7 @@ export default function HomePage() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">
           Ready to create your next opportunity?
         </h2>
-        <Link href="/auth">
+        <Link href="/resume/builder">
           <Button
             size="lg"
             className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"

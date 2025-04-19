@@ -10,7 +10,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 
-
 export default function SignupSigninPage() {
   const [form, setForm] = useState({
     name: "",
@@ -34,13 +33,13 @@ export default function SignupSigninPage() {
       // ✅ Store token and user
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      window.dispatchEvent(new Event("storage"));
     } catch (error) {
       console.error("Signup Failed:", error);
     }
   };
 
   const router = useRouter();
-
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +54,7 @@ export default function SignupSigninPage() {
       // ✅ Store token and user
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-
+      window.dispatchEvent(new Event("storage"));
       // ✅ Optional: redirect after login
       router.push("/resume/builder");
     } catch (error) {

@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { z } from "zod";
 
-// ✅ Updated schema with optional startDate, endDate, and marks
 const inputSchema = z.object({
   fullName: z.string(),
   education: z.array(
@@ -31,7 +30,6 @@ const inputSchema = z.object({
   prompt: z.string().optional(),
 });
 
-// ✅ AI setup
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: NextRequest) {

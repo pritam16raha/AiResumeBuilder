@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
       model: "gemini-2.0-flash",
     });
 
-    // ✅ Smart Prompt Engineering
     const finalPrompt = `
 Generate a professional and concise resume summary based on the following:
 
