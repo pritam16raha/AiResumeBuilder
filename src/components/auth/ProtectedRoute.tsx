@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +12,9 @@ export default function ProtectedRoute({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
+    setIsLoading(true);
 
     if (!token) {
       router.push("/auth");

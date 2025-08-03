@@ -1,7 +1,7 @@
 // src/components/resume/CoverLetterClient.tsx
 
 "use client";
-
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -44,7 +44,8 @@ export default function CoverLetterClient({ resumeId }: { resumeId: string }) {
 
   useEffect(() => {
     const fetchResumeDetails = async () => {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       if (!token) {
         router.push("/login");
         return;
@@ -155,7 +156,8 @@ export default function CoverLetterClient({ resumeId }: { resumeId: string }) {
   // Add this function below handleGenerate
   const handleSave = async () => {
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       if (!token) {
         alert("Unauthorized. Please log in again.");
         router.push("/login");

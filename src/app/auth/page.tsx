@@ -158,56 +158,79 @@
 
 
 "use client";
-
+import Cookies from "js-cookie";
 import { useState } from "react";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 
 export default function SignupSigninPage() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [authError, setAuthError] = useState(""); // ✅ store error message
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setAuthError(""); // clear error on change
+  };
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setAuthError("");
     try {
       const res = await axios.post("/api/user", { type: "register", ...form });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      Cookies.set("token", res.data.token);
+      Cookies.set("user", JSON.stringify(res.data.user));
       window.dispatchEvent(new Event("storage"));
+      router.push("/resume/builder");
     } catch (error) {
-      console.error("Signup Failed:", error);
+      handleAxiosError(error instanceof Error ? error.message : "Check your network connection", "Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setAuthError("");
     try {
       const res = await axios.post("/api/user", {
         type: "login",
         email: form.email,
         password: form.password,
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      Cookies.set("token", res.data.token);
+      Cookies.set("user", JSON.stringify(res.data.user));
       window.dispatchEvent(new Event("storage"));
       router.push("/resume/builder");
     } catch (error) {
-      console.error("Login Failed:", error);
+      handleAxiosError(error instanceof Error ? error.message : "Check your network connection", "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleAxiosError = (error: string, defaultMsg: string) => {
+    if (axios.isAxiosError(error)) {
+      setAuthError(error.response?.data?.message || defaultMsg);
+    } else {
+      setAuthError(defaultMsg);
+    }
+    console.error(defaultMsg, error);
   };
 
   return (
@@ -223,18 +246,17 @@ export default function SignupSigninPage() {
         </CardHeader>
 
         <CardContent>
+          {authError && (
+            <div className="mb-4 text-sm text-red-400 text-center bg-red-900/40 border border-red-500 rounded p-2">
+              {authError}
+            </div>
+          )}
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid grid-cols-2 mb-6 bg-white/10 p-1 rounded-lg">
-              <TabsTrigger
-                value="login"
-                className="data-[state=active]:bg-indigo-500 data-[state=active]:text-white rounded-md transition"
-              >
+              <TabsTrigger value="login" className="data-[state=active]:bg-indigo-500 data-[state=active]:text-white rounded-md transition">
                 Sign In
               </TabsTrigger>
-              <TabsTrigger
-                value="signup"
-                className="data-[state=active]:bg-indigo-500 data-[state=active]:text-white rounded-md transition"
-              >
+              <TabsTrigger value="signup" className="data-[state=active]:bg-indigo-500 data-[state=active]:text-white rounded-md transition">
                 Sign Up
               </TabsTrigger>
             </TabsList>
@@ -242,33 +264,10 @@ export default function SignupSigninPage() {
             {/* Sign In */}
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-200">Email</Label>
-                  <Input
-                    name="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    onChange={handleChange}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-indigo-400"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-gray-200">Password</Label>
-                  <Input
-                    name="password"
-                    type="password"
-                    placeholder="••••••••"
-                    onChange={handleChange}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-indigo-400"
-                    required
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 transition-colors"
-                >
-                  Sign In
+                <FormField label="Email" name="email" type="email" placeholder="you@example.com" onChange={handleChange} />
+                <FormField label="Password" name="password" type="password" placeholder="••••••••" onChange={handleChange} />
+                <Button type="submit" disabled={loading} className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                  {loading ? "Signing In..." : "Sign In"}
                 </Button>
               </form>
             </TabsContent>
@@ -276,50 +275,45 @@ export default function SignupSigninPage() {
             {/* Sign Up */}
             <TabsContent value="signup">
               <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-gray-200">Name</Label>
-                  <Input
-                    name="name"
-                    type="text"
-                    placeholder="Your name"
-                    onChange={handleChange}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-indigo-400"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-200">Email</Label>
-                  <Input
-                    name="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    onChange={handleChange}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-indigo-400"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-gray-200">Password</Label>
-                  <Input
-                    name="password"
-                    type="password"
-                    placeholder="Create a password"
-                    onChange={handleChange}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-indigo-400"
-                    required
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 transition-colors"
-                >
-                  Sign Up
+                <FormField label="Name" name="name" type="text" placeholder="Your name" onChange={handleChange} />
+                <FormField label="Email" name="email" type="email" placeholder="you@example.com" onChange={handleChange} />
+                <FormField label="Password" name="password" type="password" placeholder="Create a password" onChange={handleChange} />
+                <Button type="submit" disabled={loading} className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                  {loading ? "Signing Up..." : "Sign Up"}
                 </Button>
               </form>
             </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+function FormField({
+  label,
+  name,
+  type,
+  placeholder,
+  onChange,
+}: {
+  label: string;
+  name: string;
+  type: string;
+  placeholder: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={name} className="text-gray-200">{label}</Label>
+      <Input
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        onChange={onChange}
+        className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-indigo-400"
+        required
+      />
     </div>
   );
 }

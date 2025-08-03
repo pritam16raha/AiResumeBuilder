@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import {
   createContext,
   useContext,
@@ -30,8 +30,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+    // const token = localStorage.getItem("token");
+    // const userData = localStorage.getItem("user");
+    const token = Cookies.get("token");
+    const userData = Cookies.get("user");
 
     if (token && userData) {
       try {
@@ -40,7 +42,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(parsedUser);
       } catch {
         // If user data is corrupted, reset it
-        localStorage.removeItem("user");
+        // localStorage.removeItem("user");
+        Cookies.remove("user");
         setIsLoggedIn(false);
         setUser(null);
       }
@@ -48,15 +51,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = (token: string, userData: User) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
+    // localStorage.setItem("token", token);
+    // localStorage.setItem("user", JSON.stringify(userData));
+    Cookies.set("token", token, { expires: 7 });
+    Cookies.set("user", JSON.stringify(userData), { expires: 7 });
     setIsLoggedIn(true);
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("user");
+    Cookies.remove("token");
+    Cookies.remove("user");
     setIsLoggedIn(false);
     setUser(null);
   };

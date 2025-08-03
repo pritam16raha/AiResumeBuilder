@@ -1,6 +1,7 @@
 // app/logout/page.tsx
 
 "use client";
+import Cookies from "js-cookie";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -10,13 +11,15 @@ export default function LogoutPage() {
 
   useEffect(() => {
     // ✅ Clear localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("user");
 
     // ✅ Optional: Clear other session data if needed
+    Cookies.remove("token");
+    Cookies.remove("user");
 
     // ✅ Redirect to login page
-    router.push("/signin");
+    router.push("/auth");
   }, [router]);
 
   return (

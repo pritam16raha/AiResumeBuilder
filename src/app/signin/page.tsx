@@ -1,6 +1,6 @@
 // src/app/login/page.tsx
 "use client";
-
+import Cookies from "js-cookie";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -30,8 +30,10 @@ export default function LoginPage() {
         type: "login",
         ...form,
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // localStorage.setItem("token", res.data.token);
+      // localStorage.setItem("user", JSON.stringify(res.data.user));
+      Cookies.set("token", res.data.token);
+      Cookies.set("user", JSON.stringify(res.data.user));
       window.dispatchEvent(new Event("storage"));
       router.push("/resume/builder");
     } catch (error) {

@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { useResumeForm } from "@/context/ResumeFormContext";
 import { ExperienceItem, ResumeFormData } from "@/types/resume";
 import axios from "axios";
@@ -122,7 +122,8 @@ export default function StepThree({ prev }: Props) {
     };
 
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       if (!token) {
         alert("❌ Unauthorized. Please login first.");
         return;

@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,9 @@ export default function ResumeEditForm({ resumeId }: Props) {
 
   useEffect(() => {
     const fetchResume = async () => {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
+      setLoading(true);
       if (!token) return router.push("/login");
 
       try {
@@ -94,7 +96,8 @@ export default function ResumeEditForm({ resumeId }: Props) {
 
   const handleSave = async () => {
     if (!formData) return;
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
     if (!token) return router.push("/login");
 
     try {

@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
@@ -11,7 +11,8 @@ export default function Navbar() {
   // ✅ Check login status on load and listen to changes
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       setIsLoggedIn(!!token);
     };
 
@@ -23,8 +24,10 @@ export default function Navbar() {
 
   // ✅ Logout function
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("user");
+    Cookies.remove("token");
+    Cookies.remove("user");
     setIsLoggedIn(false);
     window.dispatchEvent(new Event("storage"));
   };
@@ -78,7 +81,7 @@ export default function Navbar() {
             </button>
           ) : (
             <Link
-              href="/signin"
+              href="/auth"
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
             >
               Sign In
@@ -131,7 +134,7 @@ export default function Navbar() {
             </button>
           ) : (
             <Link
-              href="/signin"
+              href="/auth"
               className="block text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
             >
               Sign In

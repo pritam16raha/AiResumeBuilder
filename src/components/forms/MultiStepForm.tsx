@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
@@ -30,7 +30,9 @@ export default function MultiStepForm() {
   });
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    // const storedUser = localStorage.getItem("user");
+    const storedUser = Cookies.get("user");
+    if (!storedUser) return;
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
     if (parsedUser?.id) {
       setFormData((prev) => ({ ...prev, userId: parsedUser.id }));

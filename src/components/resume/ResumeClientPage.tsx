@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ResumePreview from "./ResumePreview";
@@ -14,9 +14,11 @@ export default function ResumeClientPage({ resumeId }: { resumeId: string }) {
 
   useEffect(() => {
     const fetchResume = async () => {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
+      setError(false);
       if (!token) {
-        console.error("❌ No token found in localStorage");
+        console.error("❌ No token found in Cookies");
         router.push("/login");
         return;
       }

@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { useState } from "react";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
@@ -33,8 +33,10 @@ export default function RegisterPage() {
         ...form,
       });
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // localStorage.setItem("token", res.data.token);
+      // localStorage.setItem("user", JSON.stringify(res.data.user));
+      Cookies.set("token", res.data.token);
+      Cookies.set("user", JSON.stringify(res.data.user));
       window.dispatchEvent(new Event("storage"));
       router.push("/resume/builder");
     } catch (error) {
@@ -120,7 +122,7 @@ export default function RegisterPage() {
         <p className="text-sm text-center mt-6 text-slate-300">
           Already have an account?{" "}
           <a
-            href="/signin"
+            href="/auth"
             className="text-blue-400 hover:underline hover:text-blue-500"
           >
             Sign In

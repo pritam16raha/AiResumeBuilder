@@ -5,6 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { Button } from "@/components/ui/button";
+import Cookies from "js-cookie";
 
 type Resume = {
   id: string;
@@ -19,7 +20,9 @@ export default function DashboardPage() {
 
 useEffect(() => {
   const fetchResumes = async () => {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
+    setLoading(true);
 
     if (!token) {
       console.warn("No token found. Redirecting or skipping fetch.");
@@ -54,7 +57,12 @@ useEffect(() => {
     if (!confirmDelete) return;
 
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
+      if (!token) {
+        console.warn("No token found. Skipping delete.");
+        return;
+      }
       const res = await axios.delete(`/api/resume/${resumeId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
